@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="80dp"
+    android:layout_height="85dp"
+    android:paddingBottom="5dp">
+
+    <FrameLayout
+        android:id="@+id/audience_video_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:id="@+id/audience_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/live_audience_background" />
+
+    <TextView
+        android:id="@+id/net_status_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="2dp"
+        android:drawableLeft="@drawable/net_status_good"
+        android:drawablePadding="4dp"
+        android:text="@string/net_excellent"
+        android:textColor="@color/white"
+        android:textSize="10dp" />
+
+    <TextView
+        android:id="@+id/audience_name_prefix"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:background="@drawable/live_audience_avatar_bg"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        tools:ignore="SpUsage"
+        tools:text="B" />
+
+    <TextView
+        android:id="@+id/audience_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:textColor="@color/white"
+        android:textSize="10dp"
+        tools:text="ByteDance" />
+
+</FrameLayout>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp"
+    android:background="@drawable/dialog_live_users_bg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:id="@+id/back_iv"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/back_arrow"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/dialog_text_color"
+            android:textSize="16sp"
+            tools:text="@string/settings" />
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/setting_items_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/resolution_iv"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/setting_button_bg"
+            android:padding="12dp"
+            android:src="@drawable/live_resolution"
+            app:layout_constraintBottom_toBottomOf="@id/mic_iv"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/switch_camera_iv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/resolution"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/resolution_iv"
+            app:layout_constraintRight_toRightOf="@id/resolution_iv"
+            app:layout_constraintTop_toBottomOf="@id/resolution_iv" />
+
+        <ImageView
+            android:id="@+id/switch_camera_iv"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/setting_button_bg"
+            android:padding="12dp"
+            android:src="@drawable/live_switch_camera"
+            app:layout_constraintBottom_toBottomOf="@id/mic_iv"
+            app:layout_constraintLeft_toRightOf="@id/resolution_iv"
+            app:layout_constraintRight_toLeftOf="@id/mic_iv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/camera_flip"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/switch_camera_iv"
+            app:layout_constraintRight_toRightOf="@id/switch_camera_iv"
+            app:layout_constraintTop_toBottomOf="@id/switch_camera_iv" />
+
+
+        <ImageView
+            android:id="@+id/mic_iv"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/setting_button_bg"
+            android:padding="12dp"
+            android:src="@drawable/mic_on"
+            app:layout_constraintLeft_toRightOf="@id/switch_camera_iv"
+            app:layout_constraintRight_toLeftOf="@id/camera_iv"
+            app:layout_constraintTop_toTopOf="@id/switch_camera_iv" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/microphone"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/mic_iv"
+            app:layout_constraintRight_toRightOf="@id/mic_iv"
+            app:layout_constraintTop_toBottomOf="@id/mic_iv" />
+
+        <ImageView
+            android:id="@+id/camera_iv"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/setting_button_bg"
+            android:padding="12dp"
+            android:src="@drawable/camera_on"
+            app:layout_constraintLeft_toRightOf="@id/mic_iv"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/mic_iv" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/camera"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/camera_iv"
+            app:layout_constraintRight_toRightOf="@id/camera_iv"
+            app:layout_constraintTop_toBottomOf="@id/camera_iv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RadioGroup
+        android:id="@+id/resolution_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <RadioButton
+            android:id="@+id/resolution_540"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_bg"
+            android:button="@null"
+            android:gravity="center"
+            android:text="540p"
+            android:textColor="#86909C" />
+
+        <RadioButton
+            android:id="@+id/resolution_720"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_bg"
+            android:button="@null"
+            android:gravity="center"
+            android:text="720p"
+            android:textColor="#86909C" />
+
+        <RadioButton
+            android:id="@+id/resolution_1080"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_bg"
+            android:button="@null"
+            android:gravity="center"
+            android:text="1080p"
+            android:textColor="#86909C" />
+
+    </RadioGroup>
+
+</LinearLayout>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:paddingTop="25dp"
+    tools:background="#000">
+
+    <FrameLayout
+        android:id="@+id/live_stream_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/live_stream_host_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#272E3B"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/host_prefix_tv"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:background="@drawable/default_header_bg"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+    </FrameLayout>
+
+    <com.volcengine.vertcdemo.interactivelive.view.LiveVideoView
+        android:id="@+id/main_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.volcengine.vertcdemo.interactivelive.view.LiveRoomControlsView
+        android:id="@+id/main_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/audience_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/button_black_rec_bg"
+        android:drawableLeft="@drawable/ic_audience"
+        android:drawablePadding="9dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp"
+        android:textColor="@color/white"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="123" />
+
+    <com.volcengine.vertcdemo.interactivelive.view.AvatarView
+        android:id="@+id/host_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintBottom_toBottomOf="@id/audience_num_tv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/audience_num_tv" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/message_rv"
+        android:layout_width="240dp"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toTopOf="@id/main_controls"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:listitem="@layout/item_live_room_message" />
+
+    <com.volcengine.vertcdemo.interactivelive.view.GuestGroupLayout
+        android:id="@+id/audience_list_rv"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/message_rv"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/main_disconnect_tip"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#394254"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/host_avatar"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/close_red" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="48dp"
+            android:gravity="center_vertical"
+            android:text="网络链接已断开，请检查设置"
+            android:textColor="@color/white" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
