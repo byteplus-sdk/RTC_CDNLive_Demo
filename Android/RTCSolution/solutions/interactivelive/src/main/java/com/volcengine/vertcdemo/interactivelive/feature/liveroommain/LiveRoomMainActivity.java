@@ -12,7 +12,6 @@ import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.INVI
 import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.INVITE_REPLY_REJECT;
 import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.LINK_MIC_STATUS_AUDIENCE_INTERACTING;
 import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.LINK_MIC_STATUS_HOST_INTERACTING;
-import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.LINK_MIC_STATUS_OTHER;
 import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.LIVE_PERMIT_TYPE_ACCEPT;
 import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.LIVE_PERMIT_TYPE_REJECT;
 import static com.volcengine.vertcdemo.interactivelive.core.LiveDataManager.MEDIA_STATUS_OFF;
@@ -48,9 +47,10 @@ import com.volcengine.vertcdemo.common.GsonUtils;
 import com.volcengine.vertcdemo.common.SolutionBaseActivity;
 import com.volcengine.vertcdemo.common.SolutionCommonDialog;
 import com.volcengine.vertcdemo.common.SolutionToast;
+import com.volcengine.vertcdemo.common.WindowUtils;
 import com.volcengine.vertcdemo.core.SolutionDataManager;
-import com.volcengine.vertcdemo.core.eventbus.SolutionDemoEventManager;
 import com.volcengine.vertcdemo.core.eventbus.AppTokenExpiredEvent;
+import com.volcengine.vertcdemo.core.eventbus.SolutionDemoEventManager;
 import com.volcengine.vertcdemo.core.net.ErrorTool;
 import com.volcengine.vertcdemo.core.net.IRequestCallback;
 import com.volcengine.vertcdemo.interactivelive.R;
@@ -65,6 +65,7 @@ import com.volcengine.vertcdemo.interactivelive.bean.LiveUserInfo;
 import com.volcengine.vertcdemo.interactivelive.bean.ReconnectInfo;
 import com.volcengine.vertcdemo.interactivelive.core.LiveDataManager;
 import com.volcengine.vertcdemo.interactivelive.core.LiveRTCManager;
+import com.volcengine.vertcdemo.interactivelive.core.LiveRTSClient;
 import com.volcengine.vertcdemo.interactivelive.databinding.ActivityLiveRoomMainBinding;
 import com.volcengine.vertcdemo.interactivelive.event.AnchorLinkFinishEvent;
 import com.volcengine.vertcdemo.interactivelive.event.AnchorLinkInviteEvent;
@@ -80,7 +81,6 @@ import com.volcengine.vertcdemo.interactivelive.event.GiftEvent;
 import com.volcengine.vertcdemo.interactivelive.event.InviteAudienceEvent;
 import com.volcengine.vertcdemo.interactivelive.event.LinkMicStatusEvent;
 import com.volcengine.vertcdemo.interactivelive.event.LiveFinishEvent;
-import com.volcengine.vertcdemo.interactivelive.event.LiveHasBlockEvent;
 import com.volcengine.vertcdemo.interactivelive.event.LiveKickUserEvent;
 import com.volcengine.vertcdemo.interactivelive.event.LiveRoomUserEvent;
 import com.volcengine.vertcdemo.interactivelive.event.LocalKickUserEvent;
@@ -224,7 +224,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
 
                     LiveRTCManager.ins().startCaptureVideo(mSelfInfo.isCameraOn());
                     LiveRTCManager.ins().startCaptureAudio(mSelfInfo.isMicOn());
-                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo);
+                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo, mSelfInfo);
                     setCoHostVideoConfig(mCoHostInfo);
 
                     LiveRTCManager.ins().startForwardStreamToRooms(data.rtcRoomId,
@@ -266,7 +266,6 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
             new IRequestCallback<LiveResponse>() {
                 @Override
                 public void onSuccess(LiveResponse data) {
-
                 }
 
                 @Override
@@ -315,7 +314,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
                     mRoomStatus = ROOM_STATUS_GUEST_INTERACT;
                     mSelfInfo.status = USER_STATUS_AUDIENCE_INTERACTING;
                     mSelfInfo.linkMicStatus = LINK_MIC_STATUS_AUDIENCE_INTERACTING;
-                    mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null);
+                    mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null, mSelfInfo);
                     mViewBinding.mainControls.setAddGuestBtnStatus(STATUS_DISABLE);
                     mViewBinding.mainControls.setRole(mSelfInfo.role, LINK_MIC_STATUS_AUDIENCE_INTERACTING);
                     updatePlayerStatus();
@@ -435,7 +434,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
         drawable.setBounds(0, 0,
                 (int) Utils.dp2Px(22), (int) Utils.dp2Px(20));
         mViewBinding.audienceNumTv.setCompoundDrawables(drawable, null, null, null);
-        
+
         mLiveChatAdapter = new LiveChatAdapter();
         mViewBinding.messageRv.setLayoutManager(new LinearLayoutManager(LiveRoomMainActivity.this,
                 RecyclerView.VERTICAL, false));
@@ -455,6 +454,20 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
         mVideoPlayer = ProtocolUtil.getPlayerInstance();
         if (mVideoPlayer != null) {
             mVideoPlayer.startWithConfiguration(LiveRoomMainActivity.this);
+            mVideoPlayer.setSEICallback(s -> {
+                if (TextUtils.isEmpty(s)) {
+                    return;
+                }
+                if (s.contains(LiveRTCManager.KEY_SEI_KEY_SOURCE)) {
+                    if (s.contains(LiveRTCManager.KEY_SEI_VALUE_SOURCE_NONE)) {
+                        togglePkLabel4Audience(false);
+                        return;
+                    }
+                    if (s.contains(LiveRTCManager.KEY_SEI_VALUE_SOURCE_CO_HOST)) {
+                        togglePkLabel4Audience(true);
+                    }
+                }
+            });
         }
     }
     /**
@@ -557,19 +570,20 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
 
         if (mLiveRoomInfo != null && mSelfInfo != null) {
             String roomId = mLiveRoomInfo.roomId;
+            LiveRTSClient rtsClient = LiveRTCManager.ins().getRTSClient();
             if (mSelfInfo.role == USER_ROLE_AUDIENCE) {
                 if (mRoomStatus == ROOM_STATUS_GUEST_INTERACT) {
                     showToast(getString(R.string.host_disconnected_live));
                 }
-                if (!isLeaveByKickOut) {
-                    LiveRTCManager.ins().getRTSClient().requestLeaveLiveRoom(roomId, mLeaveLiveCallback);
+                if (!isLeaveByKickOut && rtsClient != null) {
+                    rtsClient.requestLeaveLiveRoom(roomId, mLeaveLiveCallback);
                 }
             } else if (mSelfInfo.role == USER_ROLE_HOST) {
                 if (mRoomStatus == ROOM_STATUS_GUEST_INTERACT) {
                     showToast(getString(R.string.disconnected));
                 }
-                if (!isLeaveByKickOut) {
-                    LiveRTCManager.ins().getRTSClient().requestFinishLive(roomId, mFinishLiveCallback);
+                if (!isLeaveByKickOut && rtsClient != null) {
+                    rtsClient.requestFinishLive(roomId, mFinishLiveCallback);
                 }
             }
         }
@@ -621,12 +635,12 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
             LiveRTCManager.ins().joinRoom(mRTCRoomId, mSelfInfo.userId, mRTCToken);
             if (mRoomStatus == ROOM_STATUS_CO_HOST) {
                 updateOnlineGuestList(null);
-                mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo);
+                mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo, mSelfInfo);
             } else if (mRoomStatus == ROOM_STATUS_GUEST_INTERACT) {
-                mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, null);
+                mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, null, mSelfInfo);
                 updateOnlineGuestList();
             } else {
-                mViewBinding.mainContainer.setLiveUserInfo(liveUserInfo, null);
+                mViewBinding.mainContainer.setLiveUserInfo(liveUserInfo, null, mSelfInfo);
                 updateOnlineGuestList(null);
             }
 
@@ -636,10 +650,8 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
                     LiveRTCManager.ins().getHeight(LiveDataManager.USER_ROLE_HOST),
                     null);
         } else {
-            mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null);
+            mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null, mSelfInfo);
             updatePlayerStatus();
-            // The color block mask needs to be adjusted when the audience enters the room
-            addOrRemoveBlock(liveRoomInfo != null && (mHostInfo.linkMicStatus == LINK_MIC_STATUS_HOST_INTERACTING));
             updateOnlineGuestList(null);
             mViewBinding.mainControls.setAddGuestBtnStatus(STATUS_NORMAL);
         }
@@ -728,6 +740,8 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
                     dialog.dismiss();
                     LiveRTCManager.ins().getRTSClient().finishAudienceLinkByAudience("",
                             mLiveRoomInfo.roomId, mInteractResponse);
+                    mSelfInfo.linkMicStatus = LiveDataManager.LINK_MIC_STATUS_OTHER;
+                    mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null, mSelfInfo);
                 });
                 dialog.show();
             }
@@ -836,7 +850,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
                     && (mHostInfo.linkMicStatus != LINK_MIC_STATUS_HOST_INTERACTING);
             mViewBinding.mainContainer.setVisibility(
                     isSingleCameraOff
-                    ? VISIBLE : GONE);
+                            ? VISIBLE : GONE);
             playLiveStream();
             mViewBinding.liveStreamContainer.setVisibility(isSingleCameraOff ? INVISIBLE : VISIBLE);
         }
@@ -852,15 +866,15 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
 
         String url = mPullStreamMap.get(LiveRTCManager.ins().getPlayLiveStreamResolution());
         if (mVideoPlayer != null) {
-            mVideoPlayer.setPlayerUrl(url, mViewBinding.liveStreamContainer, null);
+            mVideoPlayer.setPlayerUrl(url, mViewBinding.liveStreamContainer);
             mVideoPlayer.play();
             mVideoPlayer.updatePlayScaleModel(IVideoPlayer.MODE_ASPECT_FILL);
         }
     }
     /**
      * Set layout parameters in hidden mode, while ensuring the canvas is 9:16
-     * @param params layout parameter object
-     * @param containerWidth the width of the container
+     * @param params          layout parameter object
+     * @param containerWidth  the width of the container
      * @param containerHeight the height of the container
      */
     private void calculatePlayerSize(FrameLayout.LayoutParams params,
@@ -941,43 +955,18 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
     private void hideTopTip() {
         mViewBinding.mainDisconnectTip.setVisibility(View.GONE);
     }
-    /**
-     * Whether to add a color block mask when the audience is watching the live broadcast
-     *
-     * @param add add
-     */
-    private void addOrRemoveBlock(boolean add) {
-        /*
-        int childViewCount = mViewBinding.liveStreamContainer.getChildCount();
-        if (add && childViewCount == 1) {
-            int height = WindowUtils.getScreenWidth(this) * 16 / 9;
-            int blockHeight = (mViewBinding.liveStreamContainer.getHeight() - height / 2) / 2;
-            View topView = new View(this);
-            topView.setBackgroundColor(Color.parseColor("#272E3B"));
-            FrameLayout.LayoutParams topParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT, blockHeight);
-            mViewBinding.liveStreamContainer.addView(topView, topParams);
 
-            View bottomView = new View(this);
-            bottomView.setBackgroundColor(Color.parseColor("#272E3B"));
-            FrameLayout.LayoutParams bottomParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT, blockHeight);
-            bottomParams.topMargin = mViewBinding.liveStreamContainer.getHeight() - blockHeight;
-            mViewBinding.liveStreamContainer.addView(bottomView, bottomParams);
-        } else if (!add && childViewCount != 1) {
-            ArrayList<View> removingViews = new ArrayList<>();
-            for (int i = 0; i < mViewBinding.liveStreamContainer.getChildCount(); i++) {
-                View view = mViewBinding.liveStreamContainer.getChildAt(i);
-                if (view instanceof SurfaceView || view instanceof TextureView) {
-                    continue;
-                }
-                removingViews.add(view);
-            }
-            for (View view : removingViews) {
-                mViewBinding.liveStreamContainer.removeView(view);
-            }
+    private void togglePkLabel4Audience(boolean show) {
+        if (show) {
+            mViewBinding.livePkLabelTv.setVisibility(VISIBLE);
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mViewBinding.livePkLabelTv.getLayoutParams();
+            /***标签距离顶部距离为屏幕高度除以4，是因为在{@link LiveRTCManager#updateLiveTranscodingWithHost} 中自己主播和对端主播布局参数中
+             视频流对应区域左上角的横坐标相对整体画面的归一化比例都为0.25(xxRegion.position(0, 0.25))**/
+            layoutParams.topMargin = WindowUtils.getScreenHeight(getApplication()) / 4;
+            mViewBinding.livePkLabelTv.setLayoutParams(layoutParams);
+        } else {
+            mViewBinding.livePkLabelTv.setVisibility(GONE);
         }
-         */
     }
 
     private List<String> sortUserList(List<LiveUserInfo> userInfos) {
@@ -1087,11 +1076,13 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
                 if (mCoHostInfo != null && TextUtils.equals(event.userId, mCoHostInfo.userId)) {
                     mCoHostInfo.micStatus = event.mic;
                     mCoHostInfo.cameraStatus = event.camera;
-                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo);
+                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo, mSelfInfo);
                 } else if (TextUtils.equals(event.userId, mSelfInfo.userId)) {
                     mSelfInfo.micStatus = event.mic;
                     mSelfInfo.cameraStatus = event.camera;
-                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo);
+                    LiveRTCManager.ins().startCaptureAudio(event.mic == MEDIA_STATUS_ON);
+                    LiveRTCManager.ins().startCaptureVideo(event.camera == MEDIA_STATUS_ON);
+                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo, mSelfInfo);
                 }
             } else {
                 if (TextUtils.equals(event.userId, mSelfInfo.userId)) {
@@ -1099,7 +1090,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
                     mSelfInfo.cameraStatus = event.camera;
                     LiveRTCManager.ins().startCaptureAudio(event.mic == MEDIA_STATUS_ON);
                     LiveRTCManager.ins().startCaptureVideo(event.camera == MEDIA_STATUS_ON);
-                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, null);
+                    mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, null, mSelfInfo);
                 }
                 if (mRoomStatus == ROOM_STATUS_GUEST_INTERACT) {
                     for (LiveUserInfo userInfo : mGuestList) {
@@ -1122,7 +1113,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
             if (mHostInfo != null && TextUtils.equals(event.userId, mHostInfo.userId)) {
                 mHostInfo.micStatus = event.mic;
                 mHostInfo.cameraStatus = event.camera;
-                mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null);
+                mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null, mSelfInfo);
                 updatePlayerStatus();
             }
             if (mRoomStatus == ROOM_STATUS_GUEST_INTERACT) {
@@ -1183,14 +1174,6 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
     public void onLinkMicStatusEvent(LinkMicStatusEvent event) {
         mRoomStatus = event.linkMicStatus;
         mHostInfo.linkMicStatus = event.linkMicStatus;
-        // is not an anchor, need to adjust the mask position
-        if (mSelfInfo.role != USER_ROLE_HOST) {
-            if (mRoomStatus == LINK_MIC_STATUS_OTHER) {
-                addOrRemoveBlock(false);
-            } else if (mRoomStatus == LINK_MIC_STATUS_HOST_INTERACTING) {
-                addOrRemoveBlock(true);
-            }
-        }
         updatePlayerStatus();
     }
     // Audience Lianmai Audience end Invite audience to mic notification
@@ -1300,6 +1283,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
             updatePlayerStatus();
             mViewBinding.mainControls.setAddGuestBtnStatus(STATUS_DISABLE);
             mViewBinding.mainControls.setRole(mSelfInfo.role, LINK_MIC_STATUS_AUDIENCE_INTERACTING);
+            mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null, mSelfInfo);
         }
     }
     // Anchor Lianmai, the anchor side, received the host Lianmai invitation
@@ -1351,7 +1335,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
                 }
             }
             mViewBinding.mainControls.setCoHostBtnStatus(STATUS_DISABLE);
-            mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo);
+            mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, mCoHostInfo, mSelfInfo);
             setCoHostVideoConfig(mCoHostInfo);
             LiveRTCManager.ins().startForwardStreamToRooms(event.rtcRoomId, mCoHostInfo.userId,
                     event.rtcToken, mRTCRoomId, mSelfInfo.userId, mPushUrl);
@@ -1467,7 +1451,7 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
             mViewBinding.mainControls.setCoHostBtnStatus(STATUS_NORMAL);
             updateOnlineGuestList(null);
 
-            mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null);
+            mViewBinding.mainContainer.setLiveUserInfo(mHostInfo, null, mSelfInfo);
             updatePlayerStatus();
 
             mViewBinding.mainControls.setAddGuestBtnStatus(STATUS_NORMAL);
@@ -1478,20 +1462,15 @@ public class LiveRoomMainActivity extends SolutionBaseActivity {
     public void onAnchorLinkFinishEvent(AnchorLinkFinishEvent event) {
         mRoomStatus = ROOM_STATUS_LIVE;
         showToast(getString(R.string.disconnected));
-        LiveRTCManager.ins().setCoHostVideoConfig(0 , 0);
+        LiveRTCManager.ins().setCoHostVideoConfig(0, 0);
         LiveRTCManager.ins().updateLiveTranscodingWithHost(false, mPushUrl,
                 mRTCRoomId, mSelfInfo.userId, null, null);
         LiveRTCManager.ins().stopLiveTranscodingWithHost();
         updateOnlineGuestList(null);
-        mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, null);
+        mViewBinding.mainContainer.setLiveUserInfo(mSelfInfo, null, mSelfInfo);
         mViewBinding.mainControls.setRole(USER_ROLE_HOST, LiveDataManager.LINK_MIC_STATUS_OTHER);
         mViewBinding.mainControls.setAddGuestBtnStatus(STATUS_NORMAL);
         mViewBinding.mainControls.setCoHostBtnStatus(STATUS_NORMAL);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLiveHasBlockEvent(LiveHasBlockEvent event) {
-        addOrRemoveBlock(event.hasBlock);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

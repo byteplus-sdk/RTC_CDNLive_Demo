@@ -37,6 +37,7 @@
         CGFloat itemHeight = SCREEN_HEIGHT * 80.0 / 667.0;
         CGFloat viewHeight = (itemHeight + 2) * maxItemNumber;
         [self addSubview:self.noStreamingView];
+        [self.noStreamingView setUserName:roomInfoModel.anchorUserName];
         [self.noStreamingView mas_makeConstraints:^(MASConstraintMaker *make) {
           make.edges.equalTo(self);
         }];

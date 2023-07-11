@@ -41,7 +41,6 @@
     <string name="xxx_join_live">%s wants to be in your LIVE</string>
     <string name="xxx_declines_invite">%s declines your invitation</string>
     <string name="request_declined">Your request declined.</string>
-    <string name="start_live_soon">Request accepted. You\'ll join the LIVE soon.</string>
     <string name="xxxinvites_live">%s invites you to co-hosting</string>
     <string name="not_available_live">Your invitation is declined. The host is not available now.</string>
     <string name="xxxdisconnected_live">%s has disconnected with you</string>

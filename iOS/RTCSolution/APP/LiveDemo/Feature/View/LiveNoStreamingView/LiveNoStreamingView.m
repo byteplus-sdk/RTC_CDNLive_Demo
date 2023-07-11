@@ -30,7 +30,6 @@
           make.width.height.mas_equalTo(160);
           make.center.equalTo(self);
         }];
-        self.avatarComponent.text = @"B";
     }
     return self;
 }

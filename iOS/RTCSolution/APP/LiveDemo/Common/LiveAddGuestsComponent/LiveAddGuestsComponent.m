@@ -136,9 +136,8 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
     _hostUid = hostUid;
     _userList = userList;
     
-    [[LiveRTCManager shareRtc] pauseRemoteAudioSubscribedStream:NO];
-    
     if ([hostUid isEqualToString:[LocalUserComponent userModel].uid]) {
+        [[LiveRTCManager shareRtc] pauseRemoteAudioSubscribedStream:NO];
         __weak __typeof(self) wself = self;
         [LiveRTCManager shareRtc].onUserPublishStreamBlock = ^(NSString * _Nonnull uid) {
             [[LiveRTCManager shareRtc] updateTranscodingLayout:userList

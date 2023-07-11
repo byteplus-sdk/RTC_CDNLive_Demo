@@ -41,7 +41,6 @@
     <string name="xxx_join_live">观众%s向你发来连线邀请</string>
     <string name="xxx_declines_invite">观众%s拒绝与你连麦</string>
     <string name="request_declined">主播拒绝和你连线</string>
-    <string name="start_live_soon">主播接受了您的连麦申请，即将开始连麦</string>
     <string name="xxxinvites_live">%s邀请你进行主播连线，是否接受</string>
     <string name="not_available_live">主播暂时有点事，拒绝了你的邀请</string>
     <string name="xxxdisconnected_live">%s断开了与您的连麦</string>

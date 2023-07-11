@@ -4,6 +4,7 @@
 package com.volcengine.vertcdemo.interactivelive.view;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.TextureView;
@@ -18,13 +19,14 @@ import androidx.core.content.ContextCompat;
 import com.volcengine.vertcdemo.core.SolutionDataManager;
 import com.volcengine.vertcdemo.interactivelive.R;
 import com.volcengine.vertcdemo.interactivelive.bean.LiveUserInfo;
+import com.volcengine.vertcdemo.interactivelive.core.LiveDataManager;
 import com.volcengine.vertcdemo.interactivelive.core.LiveRTCManager;
 import com.volcengine.vertcdemo.interactivelive.databinding.ViewLiveVideoBinding;
 import com.volcengine.vertcdemo.utils.Utils;
 /**
  * Handle the RTC layout of interactive live broadcast, single-host live broadcast and host room pk
  *
- * Update data using {@link #setLiveUserInfo(LiveUserInfo, LiveUserInfo)}
+ * Update data using {@link #setLiveUserInfo(LiveUserInfo, LiveUserInfo, LiveUserInfo)}
  * Use {@link #updateNetStatus(String, boolean)} to update network status
  *
  * Internally uses {@link #muteRemoteUserAudio()} to mute remote audio
@@ -32,6 +34,7 @@ import com.volcengine.vertcdemo.utils.Utils;
 public class LiveVideoView extends ConstraintLayout {
 
     private ViewLiveVideoBinding mViewBinding;
+    private LiveUserInfo mLocalUserInfo;
     private LiveUserInfo mHostUserInfo;
     private LiveUserInfo mCoHostUserInfo;
     private String mMuteUserId = null;
@@ -57,7 +60,14 @@ public class LiveVideoView extends ConstraintLayout {
 
         mViewBinding.coHostAudio.setOnClickListener((v) -> muteRemoteUserAudio());
 
-        setLiveUserInfo(null, null);
+        setLiveUserInfo(null, null, null);
+
+        setCompoundDrawableSize(R.drawable.mic_off_1x, mViewBinding.singleMicStatusTv);
+        setCompoundDrawableSize(R.drawable.camera_off_1x, mViewBinding.singleCameraStatusTv);
+        setCompoundDrawableSize(R.drawable.mic_off_1x, mViewBinding.hostMicStatusTv);
+        setCompoundDrawableSize(R.drawable.camera_off_1x, mViewBinding.hostCameraStatusTv);
+        setCompoundDrawableSize(R.drawable.mic_off_1x, mViewBinding.coHostMicStatusTv);
+        setCompoundDrawableSize(R.drawable.camera_off_1x, mViewBinding.coHostCameraStatusTv);
     }
     /**
      * Mute remote user audio
@@ -92,13 +102,15 @@ public class LiveVideoView extends ConstraintLayout {
     }
     /**
      * Set single anchor/pk mode user information
-     * @param hostUserInfo host information
+     * @param hostUserInfo   host information
      * @param coHostUserInfo pk mode peer user information
      */
     public void setLiveUserInfo(@Nullable LiveUserInfo hostUserInfo,
-                                @Nullable LiveUserInfo coHostUserInfo) {
+                                @Nullable LiveUserInfo coHostUserInfo,
+                                @NonNull LiveUserInfo localUserInfo) {
         setMuteUserId(coHostUserInfo == null ? null : coHostUserInfo.userId);
 
+        mLocalUserInfo = localUserInfo;
         mHostUserInfo = hostUserInfo;
         mCoHostUserInfo = coHostUserInfo;
 
@@ -144,13 +156,15 @@ public class LiveVideoView extends ConstraintLayout {
             mViewBinding.singleCameraStatusTv.setVisibility(GONE);
             mViewBinding.singleVideoContainer.removeAllViews();
         } else {
-            mViewBinding.singleNetworkStatusTv.setVisibility(VISIBLE);
+            boolean localIsHost = TextUtils.equals(userInfo.userId, SolutionDataManager.ins().getUserId());
+            boolean localIsGuest = !localIsHost && mLocalUserInfo.linkMicStatus == LiveDataManager.LINK_MIC_STATUS_AUDIENCE_INTERACTING;
+            mViewBinding.singleNetworkStatusTv.setVisibility(localIsHost || localIsGuest ? VISIBLE : GONE);
             mViewBinding.singleHeadTv.setVisibility(VISIBLE);
             mViewBinding.singleHeadTv.setText(userInfo.getNamePrefix());
 
             boolean isCameraOn = userInfo.isCameraOn();
             mViewBinding.singleHeadTv.setVisibility(isCameraOn ? GONE : VISIBLE);
-            mViewBinding.singleCameraStatusTv.setVisibility(isCameraOn ? GONE : VISIBLE);
+            mViewBinding.singleCameraStatusTv.setVisibility(!isCameraOn && (localIsHost || localIsGuest) ? VISIBLE : GONE);
 
             if (isCameraOn) {
                 TextureView view = LiveRTCManager.ins().getUserRenderView(userInfo.userId);
@@ -163,9 +177,9 @@ public class LiveVideoView extends ConstraintLayout {
             } else {
                 mViewBinding.singleVideoContainer.removeAllViews();
             }
-
+            boolean isMicOn = userInfo.isMicOn();
             mViewBinding.singleMicStatusTv.setVisibility(
-                    userInfo.isMicOn() ? GONE : VISIBLE);
+                    !isMicOn && (localIsHost || localIsGuest) ? VISIBLE : GONE);
         }
     }
     /**
@@ -181,13 +195,14 @@ public class LiveVideoView extends ConstraintLayout {
             mViewBinding.hostMicStatusTv.setVisibility(GONE);
             mViewBinding.hostVideoContainer.removeAllViews();
         } else {
-            mViewBinding.hostNetworkStatusTv.setVisibility(VISIBLE);
+            boolean localIsHost = TextUtils.equals(userInfo.userId, SolutionDataManager.ins().getUserId());
+            mViewBinding.hostNetworkStatusTv.setVisibility(localIsHost ? VISIBLE : GONE);
             mViewBinding.hostHeadTv.setVisibility(VISIBLE);
             mViewBinding.hostHeadTv.setText(userInfo.getNamePrefix());
 
             boolean isCameraOn = userInfo.isCameraOn();
             mViewBinding.hostHeadTv.setVisibility(isCameraOn ? GONE : VISIBLE);
-            mViewBinding.hostCameraStatusTv.setVisibility(isCameraOn ? GONE : VISIBLE);
+            mViewBinding.hostCameraStatusTv.setVisibility(!isCameraOn && localIsHost ? VISIBLE : GONE);
             if (isCameraOn) {
                 TextureView view = LiveRTCManager.ins().getUserRenderView(userInfo.userId);
                 if (TextUtils.equals(userInfo.userId, SolutionDataManager.ins().getUserId())) {
@@ -201,7 +216,7 @@ public class LiveVideoView extends ConstraintLayout {
             }
 
             mViewBinding.hostMicStatusTv.setVisibility(
-                    userInfo.isMicOn() ? GONE : VISIBLE);
+                    !userInfo.isMicOn() && localIsHost ? VISIBLE : GONE);
         }
     }
     /**
@@ -225,7 +240,7 @@ public class LiveVideoView extends ConstraintLayout {
 
             boolean isCameraOn = userInfo.isCameraOn();
             mViewBinding.coHostHeadTv.setVisibility(isCameraOn ? GONE : VISIBLE);
-            mViewBinding.coHostCameraStatusTv.setVisibility(isCameraOn ? GONE : VISIBLE);
+            mViewBinding.coHostCameraStatusTv.setVisibility(!isCameraOn ? VISIBLE : GONE);
             if (isCameraOn) {
                 TextureView view = LiveRTCManager.ins().getUserRenderView(userInfo.userId);
                 if (TextUtils.equals(userInfo.userId, SolutionDataManager.ins().getUserId())) {
@@ -238,8 +253,7 @@ public class LiveVideoView extends ConstraintLayout {
                 mViewBinding.coHostVideoContainer.removeAllViews();
             }
 
-            mViewBinding.coHostMicStatusTv.setVisibility(
-                    userInfo.isMicOn() ? GONE : VISIBLE);
+            mViewBinding.coHostMicStatusTv.setVisibility(!userInfo.isMicOn() ? VISIBLE : GONE);
         }
 
         updateMuteIcon();
@@ -266,18 +280,19 @@ public class LiveVideoView extends ConstraintLayout {
                 return;
             }
         }
-
         tv.setVisibility(VISIBLE);
-        if (isGood) {
-            tv.setText(R.string.net_excellent);
-            tv.setCompoundDrawablesWithIntrinsicBounds(
-                    ContextCompat.getDrawable(getContext(), R.drawable.net_status_good),
-                    null, null, null);
-        } else {
-            tv.setText(R.string.net_stuck_stopped);
-            tv.setCompoundDrawablesWithIntrinsicBounds(
-                    ContextCompat.getDrawable(getContext(), R.drawable.net_status_bad),
-                    null, null, null);
+        int resId = isGood ? R.drawable.net_status_good : R.drawable.net_status_bad;
+        setCompoundDrawableSize(resId, tv);
+        tv.setText(isGood ? R.string.net_excellent : R.string.net_stuck_stopped);
+    }
+
+    private void setCompoundDrawableSize(int drawableResId, TextView textView) {
+        Drawable drawable = ContextCompat.getDrawable(getContext(), drawableResId);
+        if (drawable != null) {
+            drawable.setBounds(0, 0, (int) Utils.dp2Px(12), (int) Utils.dp2Px(12));
+            textView.setCompoundDrawables(drawable, null, null, null);
+            textView.setCompoundDrawablePadding((int) Utils.dp2Px(2));
         }
     }
+
 }

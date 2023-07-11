@@ -121,7 +121,10 @@ public class AudienceLayout extends FrameLayout {
         Drawable res = isGood
                 ? ContextCompat.getDrawable(getContext(), R.drawable.net_status_good)
                 : ContextCompat.getDrawable(getContext(), R.drawable.net_status_bad);
-        mViewBinding.netStatusTv.setCompoundDrawablesWithIntrinsicBounds(res, null, null, null);
+        if (res != null) {
+            res.setBounds(0, 0, (int) Utils.dp2Px(12), (int) Utils.dp2Px(12));
+        }
+        mViewBinding.netStatusTv.setCompoundDrawables(res, null, null, null);
         mViewBinding.netStatusTv.setText(isGood
                 ? getContext().getString(R.string.net_excellent)
                 : getContext().getString(R.string.net_stuck_stopped));
