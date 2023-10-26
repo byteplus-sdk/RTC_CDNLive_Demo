@@ -73,7 +73,12 @@ public class IVideoPlayerImpl implements IVideoPlayer {
     }
 
     @Override
-    public void setPlayerUrl(String url, View container, IAction<String> seiCallback) {
+    public void setSEICallback(IAction<String> SEICallback) {
+
+    }
+
+    @Override
+    public void setPlayerUrl(String url, View container) {
         Log.d(TAG, String.format("setPlayerUrl: %s", url));
         mSourcePath = url;
         if (container instanceof ViewGroup && mRenderViewContainer != null) {
@@ -116,7 +121,7 @@ public class IVideoPlayerImpl implements IVideoPlayer {
             return;
         }
         ViewGroup viewGroup = (ViewGroup) parent;
-        setPlayerUrl(url, viewGroup, null);
+        setPlayerUrl(url, viewGroup);
     }
 
     @Override

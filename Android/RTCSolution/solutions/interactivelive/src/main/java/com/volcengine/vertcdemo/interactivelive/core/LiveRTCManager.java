@@ -133,8 +133,7 @@ public class LiveRTCManager {
     // RTS object, used to realize the long link of the business server
     private RTCRoom mRTSRoom = null;
     // RTS object callback
-    private final RTCRoomEventHandlerWithRTS mRTSRoomEventHandler = new RTCRoomEventHandlerWithRTS() {
-    };
+    private final RTCRoomEventHandlerWithRTS mRTSRoomEventHandler = new RTCRoomEventHandlerWithRTS();
 
     private final RTCVideoEventHandlerWithRTS mRTCVideoEventHandler = new RTCVideoEventHandlerWithRTS() {
 
@@ -523,10 +522,12 @@ public class LiveRTCManager {
     }
 
     public void setRemoteVideoView(String userId, String roomId, TextureView textureView) {
-        Log.d(TAG, String.format("setRemoteVideoView : %s %s", userId, roomId));
+        Log.d(TAG, String.format("setRemoteVideoView : mRoomId=%s, remote(uid=%s, roomId=%s)", mRoomId, userId, roomId));
         if (mRTCVideo != null) {
             VideoCanvas canvas = new VideoCanvas(textureView, RENDER_MODE_HIDDEN);
-            RemoteStreamKey remoteStreamKey = new RemoteStreamKey(roomId, userId, StreamIndex.STREAM_INDEX_MAIN);
+
+            // NOTE: should use self roomId
+            RemoteStreamKey remoteStreamKey = new RemoteStreamKey(mRoomId, userId, StreamIndex.STREAM_INDEX_MAIN);
             mRTCVideo.setRemoteVideoCanvas(remoteStreamKey, canvas);
         }
     }

@@ -30,8 +30,7 @@ public class IJKPlayerActivity extends AppCompatActivity {
             if (mIVideoPlayer != null) {
                 mIVideoPlayer.setPlayerUrl(
                         testUrl,
-                        viewBinding.videoContainer,
-                        null);
+                        viewBinding.videoContainer);
             }
         });
         viewBinding.play.setOnClickListener(v -> {

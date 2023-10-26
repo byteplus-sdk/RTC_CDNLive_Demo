@@ -220,7 +220,7 @@
 
 - (void)startForwardStreamToRooms:(NSString *)roomId token:(NSString *)token {
     // Enable forward stream
-    ForwardStreamConfiguration *configuration = [[ForwardStreamConfiguration alloc] init];
+    ByteRTCForwardStreamConfiguration *configuration = [[ByteRTCForwardStreamConfiguration alloc] init];
     configuration.roomId = roomId;
     configuration.token = token;
     
@@ -392,8 +392,8 @@
 - (void)rtcRoom:(ByteRTCRoom *)rtcRoom onLocalStreamStats:(ByteRTCLocalStreamStats *)stats {
 
     LiveNetworkQualityStatus liveStatus = LiveNetworkQualityStatusNone;
-    if (stats.tx_quality == ByteRTCNetworkQualityExcellent ||
-        stats.tx_quality == ByteRTCNetworkQualityGood) {
+    if (stats.txQuality == ByteRTCNetworkQualityExcellent ||
+        stats.txQuality == ByteRTCNetworkQualityGood) {
         liveStatus = LiveNetworkQualityStatusGood;
     } else {
         liveStatus = LiveNetworkQualityStatusBad;
@@ -405,8 +405,8 @@
 
 - (void)rtcRoom:(ByteRTCRoom *)rtcRoom onRemoteStreamStats:(ByteRTCRemoteStreamStats *)stats {
     LiveNetworkQualityStatus liveStatus = LiveNetworkQualityStatusNone;
-    if (stats.tx_quality == ByteRTCNetworkQualityExcellent ||
-        stats.tx_quality == ByteRTCNetworkQualityGood) {
+    if (stats.txQuality == ByteRTCNetworkQualityExcellent ||
+        stats.txQuality == ByteRTCNetworkQualityGood) {
         liveStatus = LiveNetworkQualityStatusGood;
     } else {
         liveStatus = LiveNetworkQualityStatusBad;
@@ -416,7 +416,7 @@
     }
 }
 
-- (void)rtcRoom:(ByteRTCRoom *)rtcRoom onForwardStreamStateChanged:(NSArray<ForwardStreamStateInfo *> *)infos {
+- (void)rtcRoom:(ByteRTCRoom *)rtcRoom onForwardStreamStateChanged:(NSArray<ByteRTCForwardStreamStateInfo *> *)infos {
     NSLog(@"Manager RTCSDK onForwardStreamStateChanged %@", infos);
 }
 
