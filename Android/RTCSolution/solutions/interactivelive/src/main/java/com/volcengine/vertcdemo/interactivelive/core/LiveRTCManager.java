@@ -7,6 +7,7 @@ import static com.ss.bytertc.engine.VideoCanvas.RENDER_MODE_HIDDEN;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.TextureView;
 
@@ -43,6 +44,7 @@ import com.ss.bytertc.engine.type.MediaStreamType;
 import com.ss.bytertc.engine.type.NetworkQualityStats;
 import com.ss.bytertc.engine.video.VideoCaptureConfig;
 import com.ss.bytertc.engine.video.VideoFrame;
+import com.volcengine.vertcdemo.common.WindowUtils;
 import com.volcengine.vertcdemo.core.SolutionDataManager;
 import com.volcengine.vertcdemo.core.eventbus.SolutionDemoEventManager;
 import com.volcengine.vertcdemo.core.net.rts.RTCRoomEventHandlerWithRTS;
@@ -745,8 +747,8 @@ public class LiveRTCManager {
         localRegionConfig.setRoomID(roomId);
         localRegionConfig.setLocationX(0);
         localRegionConfig.setLocationY(0);
-        localRegionConfig.setWidthProportion(1);
-        localRegionConfig.setHeightProportion(1);
+        localRegionConfig.setWidth(mHostConfig.width);
+        localRegionConfig.setHeight(mHostConfig.height);
         localRegionConfig.setAlpha(1);
         localRegionConfig.setZOrder(0);
         localRegionConfig.setRenderMode(MixedStreamRenderMode.MIXED_STREAM_RENDER_MODE_HIDDEN);
@@ -834,9 +836,9 @@ public class LiveRTCManager {
             localRegion.setIsLocalUser(true);
             localRegion.setRoomID(selfRoomId);
             localRegion.setLocationX(0);
-            localRegion.setLocationY(0.25);
-            localRegion.setWidthProportion(0.5);
-            localRegion.setHeightProportion(0.5);
+            localRegion.setLocationY((int)(0.25 * mHostConfig.height));
+            localRegion.setWidth((int)(0.5 * mHostConfig.width));
+            localRegion.setHeight((int)(0.5 * mHostConfig.height));
             localRegion.setAlpha(1);
             localRegion.setZOrder(0);
 
@@ -844,10 +846,10 @@ public class LiveRTCManager {
             hostRegion.setUserID(coHostUserId);
             hostRegion.setIsLocalUser(false);
             hostRegion.setRoomID(selfRoomId);
-            hostRegion.setLocationX(0.5);
-            hostRegion.setLocationY(0.25);
-            hostRegion.setWidthProportion(0.5);
-            hostRegion.setHeightProportion(0.5);
+            hostRegion.setLocationX((int)(0.5 * mHostConfig.width));
+            hostRegion.setLocationY((int)(0.25 * mHostConfig.height));
+            hostRegion.setWidth((int)(0.5 * mHostConfig.width));
+            hostRegion.setHeight((int)(0.5 * mHostConfig.height));
             hostRegion.setAlpha(1);
             hostRegion.setZOrder(0);
 
@@ -863,8 +865,8 @@ public class LiveRTCManager {
             localRegion.setRoomID(selfRoomId);
             localRegion.setLocationX(0);
             localRegion.setLocationY(0);
-            localRegion.setWidthProportion(1);
-            localRegion.setHeightProportion(1);
+            localRegion.setWidth(mHostConfig.width);
+            localRegion.setHeight(mHostConfig.height);
             localRegion.setAlpha(1);
             localRegion.setZOrder(0);
 
@@ -953,33 +955,34 @@ public class LiveRTCManager {
             localRegion.setRoomID(roomId);
             localRegion.setLocationX(0);
             localRegion.setLocationY(0);
-            localRegion.setWidthProportion(1);
-            localRegion.setHeightProportion(1);
+            localRegion.setWidth(mHostConfig.width);
+            localRegion.setHeight(mHostConfig.height);
             localRegion.setAlpha(1);
             localRegion.setZOrder(0);
             regions.add(localRegion);
         }
         if (audienceUserIdList != null && audienceUserIdList.size() > 1) {
             mIsTranscoding = true;
+            float screenScale = (float) mHostConfig.height / WindowUtils.getScreenHeight(AppUtil.getApplicationContext()) * 4;
             for (int i = 1; i < audienceUserIdList.size(); i++) {
                 MixedStreamLayoutRegionConfig region = new MixedStreamLayoutRegionConfig();
                 region.setUserID(audienceUserIdList.get(i));
                 region.setRoomID(roomId);
-                float screenWidth = 365;
-                float screenHeight = 667;
-                float itemHeight = 80;
-                float itemSpace = 6;
-                float itemRightSpace = 52;
-                float itemTopSpace = 500;
+                float screenWidth = mHostConfig.width;
+                float screenHeight = mHostConfig.height;
+                float itemHeight = 80 * screenScale;
+                float itemSpace = 6 * screenScale;
+                float itemRightSpace = 52 * screenScale;
+                float itemTopSpace = 500 * screenScale;
                 int index = i - 1;
-                float regionHeight = itemHeight / screenHeight;
-                float regionWidth = regionHeight * screenHeight / screenWidth;
-                float regionY = (itemTopSpace - (itemHeight + itemSpace) * index) / screenHeight;
-                float regionX = 1 - (regionHeight * screenHeight + itemRightSpace) / screenWidth;
-                region.setLocationX(regionX);
-                region.setLocationY(regionY);
-                region.setWidthProportion(regionWidth);
-                region.setHeightProportion(regionHeight);
+                float regionHeight = itemHeight;
+                float regionWidth = itemHeight;
+                float regionY = itemTopSpace - (itemHeight + itemSpace) * index;
+                float regionX = screenWidth - (regionHeight + itemRightSpace);
+                region.setLocationX((int)regionX);
+                region.setLocationY((int)regionY);
+                region.setWidth((int)regionWidth);
+                region.setHeight((int)regionHeight);
                 region.setZOrder(1);
                 region.setAlpha(1);
                 regions.add(region);
