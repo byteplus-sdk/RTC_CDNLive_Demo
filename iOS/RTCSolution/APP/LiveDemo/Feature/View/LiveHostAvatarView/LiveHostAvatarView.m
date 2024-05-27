@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveHostAvatarView.h"
 #import "LiveAvatarView.h"
@@ -20,19 +20,19 @@
     if (self) {
         [self addSubview:self.avatarView];
         [self.avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.size.mas_equalTo(CGSizeMake(32, 32));
-          make.left.mas_equalTo(2);
-          make.centerY.equalTo(self);
+            make.size.mas_equalTo(CGSizeMake(32, 32));
+            make.left.mas_equalTo(2);
+            make.centerY.equalTo(self);
         }];
 
         [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.centerY.equalTo(self);
-          make.left.equalTo(self.avatarView.mas_right).offset(8);
+            make.centerY.equalTo(self);
+            make.left.equalTo(self.avatarView.mas_right).offset(8);
         }];
 
         [self mas_updateConstraints:^(MASConstraintMaker *make) {
-          make.right.equalTo(self.titleLabel.mas_right).offset(8);
+            make.right.equalTo(self.titleLabel.mas_right).offset(8);
         }];
     }
     return self;

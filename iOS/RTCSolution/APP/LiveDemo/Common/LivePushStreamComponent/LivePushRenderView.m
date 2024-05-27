@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LivePushRenderView.h"
 #import "LiveNoStreamingView.h"
@@ -23,31 +23,31 @@
     if (self) {
         [self addSubview:self.noStreamingView];
         [self.noStreamingView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
 
         [self addSubview:self.streamView];
         [self.streamView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
 
         [self addSubview:self.netQualityView];
         [self.netQualityView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.height.mas_equalTo(17);
-          make.left.mas_equalTo(16);
-          make.top.mas_equalTo(50 + [DeviceInforTool getStatusBarHight]);
+            make.height.mas_equalTo(17);
+            make.left.mas_equalTo(16);
+            make.top.mas_equalTo(50 + [DeviceInforTool getStatusBarHight]);
         }];
 
         [self addSubview:self.micView];
         [self.micView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.height.left.equalTo(self.netQualityView);
-          make.top.mas_equalTo(75 + [DeviceInforTool getStatusBarHight]);
+            make.height.left.equalTo(self.netQualityView);
+            make.top.mas_equalTo(75 + [DeviceInforTool getStatusBarHight]);
         }];
 
         [self addSubview:self.cameraView];
         [self.cameraView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.height.left.equalTo(self.netQualityView);
-          make.top.mas_equalTo(100 + [DeviceInforTool getStatusBarHight]);
+            make.height.left.equalTo(self.netQualityView);
+            make.top.mas_equalTo(100 + [DeviceInforTool getStatusBarHight]);
         }];
     }
     return self;
@@ -61,7 +61,7 @@
 
     CGFloat top = self.micView.hidden ? 75 + [DeviceInforTool getStatusBarHight] : 100 + [DeviceInforTool getStatusBarHight];
     [self.cameraView mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.top.mas_equalTo(top);
+        make.top.mas_equalTo(top);
     }];
 
     [[LiveRTCManager shareRtc] switchVideoCapture:camera];

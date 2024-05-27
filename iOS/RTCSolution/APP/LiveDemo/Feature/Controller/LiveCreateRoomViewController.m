@@ -1,15 +1,15 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCreateRoomViewController.h"
+#import "BytedEffectProtocol.h"
 #import "LiveCreateRoomControlView.h"
 #import "LiveCreateRoomTipView.h"
 #import "LiveRTCManager.h"
 #import "LiveRoomSettingComponent.h"
 #import "LiveRoomViewController.h"
-#import "BytedEffectProtocol.h"
 
 @interface LiveCreateRoomViewController () <LiveCreateRoomControlViewDelegate>
 @property (nonatomic, strong) LiveCreateRoomTipView *tipView;
@@ -45,19 +45,19 @@
     [PublicParameterComponent share].roomId = self.roomInfoModel.roomID;
     [LiveRTSManager liveStartLive:self.roomInfoModel.roomID
                             block:^(LiveUserModel *hostUserModel,
-                                           RTSACKModel * _Nonnull model) {
-        if (model.result) {
-            self.roomInfoModel.hostUserModel = hostUserModel;
-            LiveRoomViewController *next = [[LiveRoomViewController alloc]
-                                            initWithRoomModel:self.roomInfoModel
+                                    RTSACKModel *_Nonnull model) {
+                                if (model.result) {
+                                    self.roomInfoModel.hostUserModel = hostUserModel;
+                                    LiveRoomViewController *next = [[LiveRoomViewController alloc]
+                                        initWithRoomModel:self.roomInfoModel
                                             streamPushUrl:wself.pushUrl];
-            next.settingComponent = wself.settingComponent;
-            [wself.navigationController pushViewController:next animated:YES];
-        } else {
-            [[ToastComponent shareToastComponent] showWithMessage:model.message];
-        }
-        [[ToastComponent shareToastComponent] dismiss];
-    }];
+                                    next.settingComponent = wself.settingComponent;
+                                    [wself.navigationController pushViewController:next animated:YES];
+                                } else {
+                                    [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                }
+                                [[ToastComponent shareToastComponent] dismiss];
+                            }];
 }
 
 #pragma mark - Private Action
@@ -65,31 +65,31 @@
 - (void)addSubviewAndConstraints {
     [self.view addSubview:self.renderView];
     [self.renderView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.edges.equalTo(self.view);
+        make.edges.equalTo(self.view);
     }];
 
     [self.view bringSubviewToFront:self.navView];
 
     [self.view addSubview:self.tipView];
     [self.tipView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.left.mas_equalTo(48);
-      make.centerY.equalTo(self.navView.mas_bottom).offset(10);
-      make.right.equalTo(self.view);
+        make.left.mas_equalTo(48);
+        make.centerY.equalTo(self.navView.mas_bottom).offset(10);
+        make.right.equalTo(self.view);
     }];
 
     [self.view addSubview:self.startButton];
     [self.startButton mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.size.mas_equalTo(CGSizeMake(170, 50));
-      make.centerX.equalTo(self.view);
-      make.bottom.equalTo(self.view).offset(-20 - [DeviceInforTool getVirtualHomeHeight]);
+        make.size.mas_equalTo(CGSizeMake(170, 50));
+        make.centerX.equalTo(self.view);
+        make.bottom.equalTo(self.view).offset(-20 - [DeviceInforTool getVirtualHomeHeight]);
     }];
-    
+
     [self.view addSubview:self.controlView];
     [self.controlView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.bottom.equalTo(self.startButton.mas_top).offset(-10);
-      make.centerX.equalTo(self.view);
-      make.width.mas_equalTo(200);
-      make.height.mas_equalTo(85);
+        make.bottom.equalTo(self.startButton.mas_top).offset(-10);
+        make.centerX.equalTo(self.view);
+        make.width.mas_equalTo(200);
+        make.height.mas_equalTo(85);
     }];
 }
 
@@ -97,24 +97,24 @@
     __weak __typeof(self) wself = self;
     [[ToastComponent shareToastComponent] showLoading];
     [LiveRTSManager liveCreateLive:[LocalUserComponent userModel].name
-                                    block:^(LiveRoomInfoModel *roomInfoModel, LiveUserModel *hostUserModel, NSString *pushUrl, RTSACKModel *model) {
-        [[ToastComponent shareToastComponent] dismiss];
-        if (model.result) {
-            wself.roomInfoModel = roomInfoModel;
-            wself.pushUrl = pushUrl;
-            [wself addSubviewAndConstraints];
-            [wself setupLocalRenderView];
-        } else {
-            AlertActionModel *alertModel = [[AlertActionModel alloc] init];
-            alertModel.title = LocalizedString(@"ok");
-            alertModel.alertModelClickBlock = ^(UIAlertAction *_Nonnull action) {
-                if ([action.title isEqualToString:LocalizedString(@"ok")]) {
-                    [wself.navigationController popViewControllerAnimated:YES];
-                }
-            };
-            [[AlertActionManager shareAlertActionManager] showWithMessage:model.message actions:@[ alertModel ]];
-        }
-    }];
+                             block:^(LiveRoomInfoModel *roomInfoModel, LiveUserModel *hostUserModel, NSString *pushUrl, RTSACKModel *model) {
+                                 [[ToastComponent shareToastComponent] dismiss];
+                                 if (model.result) {
+                                     wself.roomInfoModel = roomInfoModel;
+                                     wself.pushUrl = pushUrl;
+                                     [wself addSubviewAndConstraints];
+                                     [wself setupLocalRenderView];
+                                 } else {
+                                     AlertActionModel *alertModel = [[AlertActionModel alloc] init];
+                                     alertModel.title = LocalizedString(@"ok");
+                                     alertModel.alertModelClickBlock = ^(UIAlertAction *_Nonnull action) {
+                                         if ([action.title isEqualToString:LocalizedString(@"ok")]) {
+                                             [wself.navigationController popViewControllerAnimated:YES];
+                                         }
+                                     };
+                                     [[AlertActionManager shareAlertActionManager] showWithMessage:model.message actions:@[alertModel]];
+                                 }
+                             }];
 }
 
 - (void)setupLocalRenderView {
@@ -126,7 +126,7 @@
     rtcStreamView.hidden = NO;
     [self.renderView addSubview:rtcStreamView];
     [rtcStreamView mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.edges.equalTo(self.renderView);
+        make.edges.equalTo(self.renderView);
     }];
 
     // add effect
@@ -149,8 +149,8 @@
         self.controlView.hidden = YES;
         [self.beautyComponent showWithView:self.view
                               dismissBlock:^(BOOL result) {
-            wself.controlView.hidden = NO;
-        }];
+                                  wself.controlView.hidden = NO;
+                              }];
     } else {
         [[ToastComponent shareToastComponent] showWithMessage:LocalizedString(@"not_support_beauty_error")];
     }
@@ -158,9 +158,9 @@
 
 - (void)liveCreateRoomControlView:(LiveCreateRoomControlView *)liveCreateRoomControlView didClickedSettingButton:(UIButton *)button {
     [self.settingComponent showWithType:LiveRoomSettingTypeCreateRoom
-                           fromSuperView:self.view
-                                  roomID:self.roomInfoModel
-                               userModel:nil];
+                          fromSuperView:self.view
+                                 roomID:self.roomInfoModel
+                              userModel:nil];
 }
 
 #pragma mark - Getter

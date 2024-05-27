@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
-#import <Foundation/Foundation.h>
 #import "BytedPlayerProtocol.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
  * @brief start configuration Player
  */
 - (void)startWithConfiguration;
-
 
 /**
  * @brief Set playback address, parent view

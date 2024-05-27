@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCoHostRoomView.h"
 #import "LiveCoHostRoomItemView.h"
@@ -22,22 +22,22 @@
     if (self) {
         [self addSubview:self.ownItemView];
         [self.ownItemView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.width.equalTo(self).multipliedBy(0.5);
-          make.left.bottom.height.equalTo(self);
+            make.width.equalTo(self).multipliedBy(0.5);
+            make.left.bottom.height.equalTo(self);
         }];
 
         [self addSubview:self.otherItemView];
         [self.otherItemView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.width.equalTo(self).multipliedBy(0.5);
-          make.right.bottom.height.equalTo(self);
+            make.width.equalTo(self).multipliedBy(0.5);
+            make.right.bottom.height.equalTo(self);
         }];
 
         [self addSubview:self.iconImageView];
         [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.size.mas_equalTo(CGSizeMake(90, 20));
-          make.top.centerX.equalTo(self);
+            make.size.mas_equalTo(CGSizeMake(90, 20));
+            make.top.centerX.equalTo(self);
         }];
-        
+
         [self.iconImageView addSubview:self.connectingLabel];
         [self.connectingLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(66);

@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomBottomView.h"
 #import "UIView+Fillet.h"
@@ -24,7 +24,7 @@
 
         [self addSubview:self.contentView];
         [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
     }
     return self;
@@ -138,12 +138,12 @@
     }];
     [self.buttonLists mas_distributeViewsAlongAxis:MASAxisTypeHorizontal withFixedItemLength:itemWidth leadSpacing:0 tailSpacing:0];
     [self.buttonLists mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.top.bottom.equalTo(self.contentView);
+        make.top.bottom.equalTo(self.contentView);
     }];
 
     CGFloat width = (self.buttonLists.count * 36) + ((self.buttonLists.count - 1) * 12);
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.width.mas_equalTo(width);
+        make.width.mas_equalTo(width);
     }];
 }
 

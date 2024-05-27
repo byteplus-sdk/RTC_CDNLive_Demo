@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomItemButton.h"
 
@@ -21,8 +21,8 @@
 
         [self addSubview:self.desLabel];
         [self.desLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.bottom.equalTo(self).offset(-10);
-          make.centerX.equalTo(self);
+            make.bottom.equalTo(self).offset(-10);
+            make.centerX.equalTo(self);
         }];
 
         [self updateState:state];

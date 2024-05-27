@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomCell.h"
 #import "LiveAvatarView.h"
@@ -32,7 +32,7 @@
     _model = model;
     self.nameLabel.text = model.anchorUserName;
     self.avatarView.text = model.anchorUserName;
-    //room_id
+    // room_id
     self.roomIDLabel.text = [NSString stringWithFormat:@"%@:%@", LocalizedString(@"room_id"), model.roomID];
 }
 
@@ -41,39 +41,39 @@
 - (void)createUIComponent {
     [self.contentView addSubview:self.bgView];
     [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.top.equalTo(self.contentView).offset(20);
-      make.left.equalTo(self.contentView).offset(16);
-      make.right.equalTo(self.contentView).offset(-16);
+        make.top.equalTo(self.contentView).offset(20);
+        make.left.equalTo(self.contentView).offset(16);
+        make.right.equalTo(self.contentView).offset(-16);
     }];
 
     [self.bgView addSubview:self.avatarView];
     [self.avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.width.height.mas_equalTo(40);
-      make.top.left.mas_equalTo(16);
+        make.width.height.mas_equalTo(40);
+        make.top.left.mas_equalTo(16);
     }];
 
     [self.bgView addSubview:self.nameLabel];
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.centerY.equalTo(self.avatarView);
-      make.left.equalTo(self.avatarView.mas_right).offset(9);
-      make.right.mas_lessThanOrEqualTo(self.bgView.mas_right).offset(-15);
+        make.centerY.equalTo(self.avatarView);
+        make.left.equalTo(self.avatarView.mas_right).offset(9);
+        make.right.mas_lessThanOrEqualTo(self.bgView.mas_right).offset(-15);
     }];
 
     [self.bgView addSubview:self.roomIDLabel];
     [self.roomIDLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.left.mas_equalTo(16);
-      make.top.equalTo(self.avatarView.mas_bottom).offset(24);
-      make.bottom.equalTo(self.bgView.mas_bottom).offset(-16);
+        make.left.mas_equalTo(16);
+        make.top.equalTo(self.avatarView.mas_bottom).offset(24);
+        make.bottom.equalTo(self.bgView.mas_bottom).offset(-16);
     }];
 
     [self addSubview:self.livingImageView];
     [self.livingImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.left.equalTo(self.roomIDLabel.mas_right).offset(8);
-      make.centerY.equalTo(self.roomIDLabel);
+        make.left.equalTo(self.roomIDLabel.mas_right).offset(8);
+        make.centerY.equalTo(self.roomIDLabel);
     }];
 
     [self.bgView mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.bottom.equalTo(self.contentView);
+        make.bottom.equalTo(self.contentView);
     }];
 }
 

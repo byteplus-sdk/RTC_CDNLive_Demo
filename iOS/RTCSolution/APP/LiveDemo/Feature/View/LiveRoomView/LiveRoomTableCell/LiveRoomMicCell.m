@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomMicCell.h"
 #import "LiveRoomMicUserView.h"
@@ -24,19 +24,19 @@
 
         [self.contentView addSubview:self.micUserView];
         [self.micUserView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.top.equalTo(self.contentView);
-          make.left.equalTo(self.contentView).offset(20);
-          make.right.equalTo(self.contentView).offset(-20);
-          make.height.mas_equalTo(100);
-          make.bottom.equalTo(self.contentView).offset(-30);
+            make.top.equalTo(self.contentView);
+            make.left.equalTo(self.contentView).offset(20);
+            make.right.equalTo(self.contentView).offset(-20);
+            make.height.mas_equalTo(100);
+            make.bottom.equalTo(self.contentView).offset(-30);
         }];
 
         [self.contentView addSubview:self.micLineView];
         [self.micLineView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.height.mas_equalTo(1);
-          make.left.equalTo(self.contentView).offset(20);
-          make.right.equalTo(self.contentView).offset(-20);
-          make.bottom.equalTo(self.contentView).offset(-1);
+            make.height.mas_equalTo(1);
+            make.left.equalTo(self.contentView).offset(20);
+            make.right.equalTo(self.contentView).offset(-20);
+            make.bottom.equalTo(self.contentView).offset(-1);
         }];
     }
     return self;
@@ -49,7 +49,7 @@
     NSInteger row = (dataLists.count / 3);
     NSInteger rowNumber = ((dataLists.count % 3) == 0) ? row : row + 1;
     [self.micUserView mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.height.mas_equalTo(100 * rowNumber);
+        make.height.mas_equalTo(100 * rowNumber);
     }];
 }
 

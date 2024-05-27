@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomSubTitleCell.h"
 
@@ -21,10 +21,10 @@
 
         [self.contentView addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.top.equalTo(self.contentView).offset(30);
-          make.bottom.equalTo(self.contentView).offset(-20);
-          make.left.equalTo(self.contentView).offset(20);
-          make.right.equalTo(self.contentView).offset(-20);
+            make.top.equalTo(self.contentView).offset(30);
+            make.bottom.equalTo(self.contentView).offset(-20);
+            make.left.equalTo(self.contentView).offset(20);
+            make.right.equalTo(self.contentView).offset(-20);
         }];
     }
     return self;

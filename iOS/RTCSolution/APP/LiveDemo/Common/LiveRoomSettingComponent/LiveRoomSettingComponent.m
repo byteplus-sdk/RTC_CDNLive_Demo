@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomSettingComponent.h"
 #import "LiveCreateRoomSettingView.h"
@@ -63,20 +63,20 @@
         case LiveRoomSettingTypeCreateRoom: {
             [superView addSubview:self.createRoomSettingView];
             [self.createRoomSettingView mas_makeConstraints:^(MASConstraintMaker *make) {
-              CGFloat height = 300 + [DeviceInforTool getVirtualHomeHeight];
-              make.left.right.equalTo(superView);
-              make.height.mas_equalTo(height);
-              make.bottom.equalTo(superView).offset(height);
+                CGFloat height = 300 + [DeviceInforTool getVirtualHomeHeight];
+                make.left.right.equalTo(superView);
+                make.height.mas_equalTo(height);
+                make.bottom.equalTo(superView).offset(height);
             }];
             [superView layoutIfNeeded];
             [superView setNeedsUpdateConstraints];
 
             [UIView animateWithDuration:0.25
                              animations:^{
-                               [self.createRoomSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
-                                 make.bottom.equalTo(superView);
-                               }];
-                               [superView layoutIfNeeded];
+                                 [self.createRoomSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
+                                     make.bottom.equalTo(superView);
+                                 }];
+                                 [superView layoutIfNeeded];
                              }];
         } break;
         case LiveRoomSettingTypeHostLiving: {
@@ -86,20 +86,20 @@
             [self updateSwitchCamera:[[LiveRTCManager shareRtc] getCurrentVideoCapture]];
             [superView addSubview:self.hostSettingView];
             [self.hostSettingView mas_makeConstraints:^(MASConstraintMaker *make) {
-              CGFloat height = 352 + [DeviceInforTool getVirtualHomeHeight];
-              make.left.right.equalTo(superView);
-              make.height.mas_equalTo(height);
-              make.bottom.equalTo(superView).offset(height);
+                CGFloat height = 352 + [DeviceInforTool getVirtualHomeHeight];
+                make.left.right.equalTo(superView);
+                make.height.mas_equalTo(height);
+                make.bottom.equalTo(superView).offset(height);
             }];
             [superView layoutIfNeeded];
             [superView setNeedsUpdateConstraints];
 
             [UIView animateWithDuration:0.25
                              animations:^{
-                               [self.hostSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
-                                 make.bottom.equalTo(superView);
-                               }];
-                               [superView layoutIfNeeded];
+                                 [self.hostSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
+                                     make.bottom.equalTo(superView);
+                                 }];
+                                 [superView layoutIfNeeded];
                              }];
         } break;
         case LiveRoomSettingTypeHostChat: {
@@ -109,20 +109,20 @@
 
             [superView addSubview:self.hostSettingView];
             [self.hostSettingView mas_makeConstraints:^(MASConstraintMaker *make) {
-              CGFloat height = 352 + [DeviceInforTool getVirtualHomeHeight];
-              make.left.right.equalTo(superView);
-              make.height.mas_equalTo(height);
-              make.bottom.equalTo(superView).offset(height);
+                CGFloat height = 352 + [DeviceInforTool getVirtualHomeHeight];
+                make.left.right.equalTo(superView);
+                make.height.mas_equalTo(height);
+                make.bottom.equalTo(superView).offset(height);
             }];
             [superView layoutIfNeeded];
             [superView setNeedsUpdateConstraints];
 
             [UIView animateWithDuration:0.25
                              animations:^{
-                               [self.hostSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
-                                 make.bottom.equalTo(superView);
-                               }];
-                               [superView layoutIfNeeded];
+                                 [self.hostSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
+                                     make.bottom.equalTo(superView);
+                                 }];
+                                 [superView layoutIfNeeded];
                              }];
         } break;
         case LiveRoomSettingTypeGuest: {
@@ -130,39 +130,39 @@
             self.guestSettingView.isCameraOn = _camera;
             [superView addSubview:self.guestSettingView];
             [self.guestSettingView mas_makeConstraints:^(MASConstraintMaker *make) {
-              CGFloat height = 149 + [DeviceInforTool getVirtualHomeHeight];
-              make.left.right.equalTo(superView);
-              make.height.mas_equalTo(height);
-              make.bottom.equalTo(superView).offset(height);
+                CGFloat height = 149 + [DeviceInforTool getVirtualHomeHeight];
+                make.left.right.equalTo(superView);
+                make.height.mas_equalTo(height);
+                make.bottom.equalTo(superView).offset(height);
             }];
             [superView layoutIfNeeded];
             [superView setNeedsUpdateConstraints];
 
             [UIView animateWithDuration:0.25
                              animations:^{
-                               [self.guestSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
-                                 make.bottom.equalTo(superView);
-                               }];
-                               [superView layoutIfNeeded];
+                                 [self.guestSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
+                                     make.bottom.equalTo(superView);
+                                 }];
+                                 [superView layoutIfNeeded];
                              }];
         } break;
         case LiveRoomSettingTypeAudience: {
             [superView addSubview:self.audienceSettingView];
             [self.audienceSettingView mas_makeConstraints:^(MASConstraintMaker *make) {
-              CGFloat height = 149 + [DeviceInforTool getVirtualHomeHeight];
-              make.left.right.equalTo(superView);
-              make.height.mas_equalTo(height);
-              make.bottom.equalTo(superView).offset(height);
+                CGFloat height = 149 + [DeviceInforTool getVirtualHomeHeight];
+                make.left.right.equalTo(superView);
+                make.height.mas_equalTo(height);
+                make.bottom.equalTo(superView).offset(height);
             }];
             [superView layoutIfNeeded];
             [superView setNeedsUpdateConstraints];
 
             [UIView animateWithDuration:0.25
                              animations:^{
-                               [self.audienceSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
-                                 make.bottom.equalTo(superView);
-                               }];
-                               [superView layoutIfNeeded];
+                                 [self.audienceSettingView mas_updateConstraints:^(MASConstraintMaker *make) {
+                                     make.bottom.equalTo(superView);
+                                 }];
+                                 [superView layoutIfNeeded];
                              }];
         } break;
 
@@ -242,29 +242,28 @@
     _camera = !isOn;
     __weak __typeof(self) wself = self;
     [LiveRTSManager liveUpdateMediaStatus:self.liveRoomModel.roomID
-                                             mic:_mic
-                                          camera:_camera
-                                           block:^(RTSACKModel *_Nonnull model) {
-        if (!model.result) {
-            [[ToastComponent shareToastComponent] showWithMessage:model.message];
-        }
-        else {
-            [[LiveRTCManager shareRtc] switchVideoCapture:!isOn];
-            [wself updateSwitchCamera:!isOn];
-        }
-    }];
+                                      mic:_mic
+                                   camera:_camera
+                                    block:^(RTSACKModel *_Nonnull model) {
+                                        if (!model.result) {
+                                            [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                        } else {
+                                            [[LiveRTCManager shareRtc] switchVideoCapture:!isOn];
+                                            [wself updateSwitchCamera:!isOn];
+                                        }
+                                    }];
 }
 
 - (void)liveRoomHostSettingView:(nonnull LiveRoomHostSettingView *)settingView didChangeMicState:(BOOL)isOn {
     _mic = !isOn;
     [LiveRTSManager liveUpdateMediaStatus:self.liveRoomModel.roomID
-                                             mic:_mic
-                                          camera:_camera
-                                           block:^(RTSACKModel *_Nonnull model) {
-                                             if (!model.result) {
-                                                 [[ToastComponent shareToastComponent] showWithMessage:model.message];
-                                             }
-                                           }];
+                                      mic:_mic
+                                   camera:_camera
+                                    block:^(RTSACKModel *_Nonnull model) {
+                                        if (!model.result) {
+                                            [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                        }
+                                    }];
 }
 
 - (void)liveRoomHostSettingView:(nonnull LiveRoomHostSettingView *)settingView didChangeBitrate:(NSInteger)bitrate {
@@ -275,14 +274,14 @@
 - (void)liveRoomHostSettingView:(nonnull LiveRoomHostSettingView *)settingView didChangeResolution:(NSInteger)index {
     LiveSettingVideoConfig *videoConfig = settingView.videoConfig;
     [LiveRTSManager liveUpdateResWithSize:videoConfig.videoSize
-                                      roomID:self.liveRoomModel.roomID
-                                       block:^(RTSACKModel * _Nonnull model) {
-        if (model.result) {
-            [[LiveRTCManager shareRtc] updateLiveTranscodingResolution:videoConfig.videoSize];
-        } else {
-            [[ToastComponent shareToastComponent] showWithMessage:model.message];
-        }
-    }];
+                                   roomID:self.liveRoomModel.roomID
+                                    block:^(RTSACKModel *_Nonnull model) {
+                                        if (model.result) {
+                                            [[LiveRTCManager shareRtc] updateLiveTranscodingResolution:videoConfig.videoSize];
+                                        } else {
+                                            [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                        }
+                                    }];
 }
 
 - (void)liveRoomHostSettingView:(nonnull LiveRoomHostSettingView *)settingView didChangefpsType:(LiveSettingVideoFpsType)fps {
@@ -299,25 +298,25 @@
 - (void)liveRoomGuestSettingView:(nonnull LiveRoomGuestSettingView *)settingView didChangeCameraState:(BOOL)isOn {
     _camera = !isOn;
     [LiveRTSManager liveUpdateMediaStatus:self.liveRoomModel.roomID
-                                             mic:_mic
-                                          camera:_camera
-                                           block:^(RTSACKModel *_Nonnull model) {
-                                             if (!model.result) {
-                                                 [[ToastComponent shareToastComponent] showWithMessage:model.message];
-                                             }
-                                           }];
+                                      mic:_mic
+                                   camera:_camera
+                                    block:^(RTSACKModel *_Nonnull model) {
+                                        if (!model.result) {
+                                            [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                        }
+                                    }];
 }
 
 - (void)liveRoomGuestSettingView:(nonnull LiveRoomGuestSettingView *)settingView didChangeMicState:(BOOL)isOn {
     _mic = !isOn;
     [LiveRTSManager liveUpdateMediaStatus:self.liveRoomModel.roomID
-                                             mic:_mic
-                                          camera:_camera
-                                           block:^(RTSACKModel *_Nonnull model) {
-                                             if (!model.result) {
-                                                 [[ToastComponent shareToastComponent] showWithMessage:model.message];
-                                             }
-                                           }];
+                                      mic:_mic
+                                   camera:_camera
+                                    block:^(RTSACKModel *_Nonnull model) {
+                                        if (!model.result) {
+                                            [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                        }
+                                    }];
 }
 
 - (void)liveRoomGuestSettingView:(nonnull LiveRoomGuestSettingView *)settingView didSwitchCamera:(BOOL)isFront {

@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveUserModel.h"
 #import "LiveRTCManager.h"
@@ -9,11 +9,11 @@
 @implementation LiveUserModel
 
 + (NSDictionary *)modelCustomPropertyMapper {
-    return @{@"roomID" : @"room_id",
-             @"uid" : @"user_id",
-             @"role" : @"user_role",
+    return @{@"roomID": @"room_id",
+             @"uid": @"user_id",
+             @"role": @"user_role",
              @"status": @"linkmic_status",
-             @"name" : @"user_name"};
+             @"name": @"user_name"};
 }
 
 - (BOOL)isLoginUser {
@@ -29,9 +29,9 @@
     NSData *jsonData = [extra dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
     NSDictionary *extraDic = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                        options:NSJSONReadingMutableContainers
-                                                          error:&err];
-    if(err) {
+                                                             options:NSJSONReadingMutableContainers
+                                                               error:&err];
+    if (err) {
         return YES;
     }
     self.videoWidth = [extraDic[@"width"] floatValue];

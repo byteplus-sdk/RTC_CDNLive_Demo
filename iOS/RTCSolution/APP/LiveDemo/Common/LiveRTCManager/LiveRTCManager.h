@@ -1,11 +1,11 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
+#import "LivePlayerManager.h"
 #import "LiveUserModel.h"
 #import <Foundation/Foundation.h>
-#import "LivePlayerManager.h"
 @class LiveRTCManager;
 NS_ASSUME_NONNULL_BEGIN
 
@@ -82,7 +82,6 @@ typedef NS_ENUM(NSUInteger, RTCMixStatus) {
  */
 - (void)leaveRTCRoom;
 
-
 #pragma mark - Mix Stream & Forward Stream
 
 /**
@@ -95,7 +94,6 @@ typedef NS_ENUM(NSUInteger, RTCMixStatus) {
                                 hostUser:(LiveUserModel *)hostUser
                                rtcRoomId:(NSString *)rtcRoomId;
 
-
 /**
  * @brief update confluence layout
  * @param userList Confluence user array
@@ -106,7 +104,6 @@ typedef NS_ENUM(NSUInteger, RTCMixStatus) {
                       mixStatus:(RTCMixStatus)mixStatus
                       rtcRoomId:(NSString *)rtcRoomId;
 
-
 /**
  * @brief start forward stream rooms
  * @param roomId The other party's room ID
@@ -115,12 +112,10 @@ typedef NS_ENUM(NSUInteger, RTCMixStatus) {
 - (void)startForwardStreamToRooms:(NSString *)roomId
                             token:(NSString *)token;
 
-
 /**
  * @brief Stop retweeting audio and video streams across rooms
  */
 - (void)stopForwardStreamToRooms;
-
 
 #pragma mark - Device Setting
 
@@ -130,31 +125,26 @@ typedef NS_ENUM(NSUInteger, RTCMixStatus) {
  */
 - (void)switchVideoCapture:(BOOL)isStart;
 
-
 /**
  * @brief Start/Stop local audio capture
  * @param isStart ture: enable audio capture false: disable audio capture
  */
 - (void)switchAudioCapture:(BOOL)isStart;
 
-
 /**
  * @brief Get the current video capture switch status
  */
 - (BOOL)getCurrentVideoCapture;
-
 
 /**
  * @brief Front and rear camera switching
  */
 - (void)switchCamera;
 
-
 /**
  * @brief Pause remote audio subscribed stream
  */
 - (void)pauseRemoteAudioSubscribedStream:(BOOL)isPause;
-
 
 /**
  * @brief Update the RTC encoding resolution, used by anchors/hosted guests.

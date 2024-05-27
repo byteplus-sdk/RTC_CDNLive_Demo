@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveAddGuestsApplyView.h"
 
@@ -19,15 +19,15 @@
     if (self) {
         [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.top.mas_equalTo(16);
-          make.centerX.equalTo(self);
+            make.top.mas_equalTo(16);
+            make.centerX.equalTo(self);
         }];
 
         [self addSubview:self.applyButton];
         [self.applyButton mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.size.mas_equalTo(CGSizeMake(132, 44));
-          make.centerX.equalTo(self);
-          make.top.equalTo(self.titleLabel.mas_bottom).offset(24);
+            make.size.mas_equalTo(CGSizeMake(132, 44));
+            make.centerX.equalTo(self);
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(24);
         }];
     }
     return self;

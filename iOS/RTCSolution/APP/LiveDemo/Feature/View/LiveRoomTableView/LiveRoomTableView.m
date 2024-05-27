@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomTableView.h"
 
@@ -28,7 +28,7 @@
 
 - (void)setDataLists:(NSArray *)dataLists {
     _dataLists = dataLists;
-    
+
     [self.roomTableView reloadData];
 }
 
@@ -41,7 +41,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
+
     if ([self.delegate respondsToSelector:@selector(LiveRoomTableView:didSelectRowAtIndexPath:)]) {
         [self.delegate LiveRoomTableView:self didSelectRowAtIndexPath:self.dataLists[indexPath.row]];
     }

@@ -1,20 +1,20 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
-#import <Foundation/Foundation.h>
 #import "BaseUserModel.h"
 #import "LiveReconnectModel.h"
 #import "LiveRoomInfoModel.h"
 #import "LiveUserModel.h"
 #import "RoomStatusModel.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, LiveInviteReply) {
     LiveInviteReplyPermitted = 1,
-    LiveInviteReplyForbade   = 2,
+    LiveInviteReplyForbade = 2,
 };
 
 @interface LiveRTSManager : NSObject
@@ -23,25 +23,25 @@ typedef NS_ENUM(NSInteger, LiveInviteReply) {
 
 // Create a live broadcast
 + (void)liveCreateLive:(NSString *)userName
-                 block:(void (^ __nullable)(LiveRoomInfoModel * _Nullable roomInfoModel,
-                                            LiveUserModel * _Nullable hostUserModel,
-                                            NSString * _Nullable pushUrl,
-                                            RTSACKModel *model))block;
+                 block:(void (^__nullable)(LiveRoomInfoModel *_Nullable roomInfoModel,
+                                           LiveUserModel *_Nullable hostUserModel,
+                                           NSString *_Nullable pushUrl,
+                                           RTSACKModel *model))block;
 
 // Start live broadcast
 + (void)liveStartLive:(NSString *)roomID
-                block:(void (^ __nullable)(LiveUserModel * _Nullable hostUserModel,
-                                           RTSACKModel *model))block;
+                block:(void (^__nullable)(LiveUserModel *_Nullable hostUserModel,
+                                          RTSACKModel *model))block;
 
 // Get the list of live broadcasters
 + (void)liveGetActiveAnchorList:(NSString *)roomID
-                          block:(void (^ __nullable)(NSArray<LiveUserModel *> * _Nullable userList,
-                                                     RTSACKModel *model))block;
+                          block:(void (^__nullable)(NSArray<LiveUserModel *> *_Nullable userList,
+                                                    RTSACKModel *model))block;
 
 // Get the audience list
 + (void)liveGetAudienceList:(NSString *)roomID
-                      block:(void (^ __nullable)(NSArray<LiveUserModel *> * _Nullable userList,
-                                                 RTSACKModel *model))block;
+                      block:(void (^__nullable)(NSArray<LiveUserModel *> *_Nullable userList,
+                                                RTSACKModel *model))block;
 
 // Management
 + (void)liveManageGuestMedia:(NSString *)roomID
@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, LiveInviteReply) {
                  guestUserID:(NSString *)guestUserID
                          mic:(NSInteger)mic
                       camera:(NSInteger)camera
-                       block:(void (^ __nullable)(RTSACKModel *model))block;
+                       block:(void (^__nullable)(RTSACKModel *model))block;
 
 /*
  * Finish Live
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, LiveInviteReply) {
  4: The host ends all guests (disconnect)
  */
 + (void)liveFinishLive:(NSString *)roomID
-                 block:(void (^ __nullable)(RTSACKModel *model))block;
+                 block:(void (^__nullable)(RTSACKModel *model))block;
 
 #pragma mark Linkmic API
 
@@ -67,77 +67,77 @@ typedef NS_ENUM(NSInteger, LiveInviteReply) {
                    audienceRoomID:(NSString *)audienceRoomID
                    audienceUserID:(NSString *)audienceUserID
                             extra:(NSString *)extra
-                            block:(void (^ __nullable)(NSString * _Nullable linkerID,
-                                                       RTSACKModel *model))block;
+                            block:(void (^__nullable)(NSString *_Nullable linkerID,
+                                                      RTSACKModel *model))block;
 
 + (void)liveAudienceLinkmicPermit:(NSString *)roomID
                    audienceRoomID:(NSString *)audienceRoomID
                    audienceUserID:(NSString *)audienceUserID
                          linkerID:(NSString *)linkerID
                        permitType:(LiveInviteReply)permitType
-                            block:(void (^ __nullable)(NSString * _Nullable rtcRoomID,
-                                                       NSString * _Nullable rtcToken,
-                                                       NSArray<LiveUserModel *> * _Nullable userList,
-                                                       RTSACKModel *model))block;
+                            block:(void (^__nullable)(NSString *_Nullable rtcRoomID,
+                                                      NSString *_Nullable rtcToken,
+                                                      NSArray<LiveUserModel *> *_Nullable userList,
+                                                      RTSACKModel *model))block;
 
 + (void)liveAudienceLinkmicKick:(NSString *)roomID
                  audienceRoomID:(NSString *)audienceRoomID
                  audienceUserID:(NSString *)audienceUserID
-                          block:(void (^ __nullable)(RTSACKModel *model))block;
+                          block:(void (^__nullable)(RTSACKModel *model))block;
 
 + (void)liveAudienceLinkmicFinish:(NSString *)roomID
-                            block:(void (^ __nullable)(RTSACKModel *model))block;
+                            block:(void (^__nullable)(RTSACKModel *model))block;
 
 + (void)liveAnchorLinkmicInvite:(NSString *)roomID
                   inviteeRoomID:(NSString *)inviteeRoomID
                   inviteeUserID:(NSString *)inviteeUserID
                           extra:(NSString *)extra
-                          block:(void (^ __nullable)(NSString * _Nullable linkerID,
-                                                     RTSACKModel *model))block;
+                          block:(void (^__nullable)(NSString *_Nullable linkerID,
+                                                    RTSACKModel *model))block;
 
 + (void)liveAnchorLinkmicReply:(NSString *)roomID
                  inviterRoomID:(NSString *)inviterRoomID
                  inviterUserID:(NSString *)inviterUserID
                       linkerID:(NSString *)linkerID
                      replyType:(LiveInviteReply)replyType
-                         block:(void (^ __nullable)(NSString * _Nullable rtcRoomID,
-                                                    NSString * _Nullable rtcToken,
-                                                    NSArray<LiveUserModel *> * _Nullable userList,
-                                                    RTSACKModel *model))block;
+                         block:(void (^__nullable)(NSString *_Nullable rtcRoomID,
+                                                   NSString *_Nullable rtcToken,
+                                                   NSArray<LiveUserModel *> *_Nullable userList,
+                                                   RTSACKModel *model))block;
 
 + (void)liveAnchorLinkmicFinish:(NSString *)roomID
                        linkerID:(NSString *)linkerID
-                          block:(void (^ __nullable)(RTSACKModel *model))block;
+                          block:(void (^__nullable)(RTSACKModel *model))block;
 
 #pragma mark - Audience Live API
 
 // Live join live room
 + (void)liveJoinLiveRoom:(NSString *)roomID
-                   block:(void (^ __nullable)(LiveRoomInfoModel * _Nullable roomModel,
-                                              LiveUserModel * _Nullable userModel,
-                                              RTSACKModel *model))block;
+                   block:(void (^__nullable)(LiveRoomInfoModel *_Nullable roomModel,
+                                             LiveUserModel *_Nullable userModel,
+                                             RTSACKModel *model))block;
 
 // Live leave live room
 + (void)liveLeaveLiveRoom:(NSString *)roomID
-                    block:(void (^ __nullable)(RTSACKModel *model))block;
+                    block:(void (^__nullable)(RTSACKModel *model))block;
 
 #pragma mark Linkmic API
 
 + (void)liveAudienceLinkmicApply:(NSString *)roomID
-                           block:(void (^ __nullable)(NSString * _Nullable linkerID,
-                                                      RTSACKModel *model))block;
+                           block:(void (^__nullable)(NSString *_Nullable linkerID,
+                                                     RTSACKModel *model))block;
 
 + (void)liveAudienceLinkmicReply:(NSString *)roomID
                         linkerID:(NSString *)linkerID
                        replyType:(LiveInviteReply)replyType
-                           block:(void (^ __nullable)(NSString * _Nullable rtcRoomID,
-                                                      NSString * _Nullable rtcToken,
-                                                      NSArray<LiveUserModel *> * _Nullable userList,
-                                                      RTSACKModel *model))block;
+                           block:(void (^__nullable)(NSString *_Nullable rtcRoomID,
+                                                     NSString *_Nullable rtcToken,
+                                                     NSArray<LiveUserModel *> *_Nullable userList,
+                                                     RTSACKModel *model))block;
 
 + (void)liveAudienceLinkmicLeave:(NSString *)roomID
                         linkerID:(NSString *)linkerID
-                           block:(void (^ __nullable)(RTSACKModel *model))block;
+                           block:(void (^__nullable)(RTSACKModel *model))block;
 
 #pragma mark - Publish API
 
@@ -147,8 +147,8 @@ typedef NS_ENUM(NSInteger, LiveInviteReply) {
                         block:(void (^)(RTSACKModel *model))block;
 
 // Live get active live room list
-+ (void)liveGetActiveLiveRoomListWithBlock:(void (^ __nullable)(NSArray<LiveRoomInfoModel *> * _Nullable roomList,
-                                                                RTSACKModel *model))block;
++ (void)liveGetActiveLiveRoomListWithBlock:(void (^__nullable)(NSArray<LiveRoomInfoModel *> *_Nullable roomList,
+                                                               RTSACKModel *model))block;
 
 // Live clear user status
 + (void)liveClearUserWithBlock:(void (^)(RTSACKModel *model))block;
@@ -157,16 +157,16 @@ typedef NS_ENUM(NSInteger, LiveInviteReply) {
 + (void)liveUpdateMediaStatus:(NSString *)roomID
                           mic:(NSInteger)mic
                        camera:(NSInteger)camera
-                        block:(void (^ __nullable)(RTSACKModel *model))block;
+                        block:(void (^__nullable)(RTSACKModel *model))block;
 
 // Reconnect
 + (void)reconnect:(NSString *)roomID
-            block:(void (^ __nullable)(LiveReconnectModel * _Nullable reconnectModel,
-                                       RTSACKModel *model))block;
+            block:(void (^__nullable)(LiveReconnectModel *_Nullable reconnectModel,
+                                      RTSACKModel *model))block;
 
 // Send IM message
 + (void)sendIMMessage:(NSString *)message
-            block:(void (^ __nullable)(RTSACKModel *model))block;
+                block:(void (^__nullable)(RTSACKModel *model))block;
 
 #pragma mark - Global Notification message
 

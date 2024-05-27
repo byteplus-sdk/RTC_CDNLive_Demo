@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveStateIconView.h"
 #import "ToolKit.h"
@@ -22,15 +22,15 @@
 
         [self addSubview:self.iconImageView];
         [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.size.mas_equalTo(CGSizeMake(15, 15));
-          make.left.mas_equalTo(0);
-          make.centerY.equalTo(self);
+            make.size.mas_equalTo(CGSizeMake(15, 15));
+            make.left.mas_equalTo(0);
+            make.centerY.equalTo(self);
         }];
 
         [self addSubview:self.messageLabel];
         [self.messageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.left.equalTo(self.iconImageView.mas_right).offset(4);
-          make.right.centerY.equalTo(self);
+            make.left.equalTo(self.iconImageView.mas_right).offset(4);
+            make.right.centerY.equalTo(self);
         }];
 
         [self updateUI:state];
@@ -74,11 +74,11 @@
     }
 
     [self.iconImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.size.mas_equalTo(CGSizeMake(itemWidth, itemWidth));
+        make.size.mas_equalTo(CGSizeMake(itemWidth, itemWidth));
     }];
 
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.right.equalTo(self.messageLabel.mas_right);
+        make.right.equalTo(self.messageLabel.mas_right);
     }];
 }
 

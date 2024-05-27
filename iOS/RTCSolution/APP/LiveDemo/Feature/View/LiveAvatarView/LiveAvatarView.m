@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveAvatarView.h"
 
@@ -19,12 +19,12 @@
     if (self) {
         [self addSubview:self.avatarBgView];
         [self.avatarBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
 
         [self addSubview:self.avatarLabel];
         [self.avatarLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.center.equalTo(self.avatarBgView);
+            make.center.equalTo(self.avatarBgView);
         }];
     }
     return self;

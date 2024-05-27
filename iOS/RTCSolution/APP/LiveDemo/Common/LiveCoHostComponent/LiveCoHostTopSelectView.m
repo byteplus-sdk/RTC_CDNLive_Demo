@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCoHostTopSelectView.h"
 
@@ -33,25 +33,25 @@
 
 - (void)addConstraints {
     [self.raiseButton mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.left.bottom.height.equalTo(self);
-      make.width.mas_equalTo(SCREEN_WIDTH / 2);
+        make.left.bottom.height.equalTo(self);
+        make.width.mas_equalTo(SCREEN_WIDTH / 2);
     }];
 
     [self.audienceButton mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.bottom.height.equalTo(self);
-      make.left.equalTo(self.raiseButton.mas_right);
-      make.width.mas_equalTo(SCREEN_WIDTH / 2);
+        make.bottom.height.equalTo(self);
+        make.left.equalTo(self.raiseButton.mas_right);
+        make.width.mas_equalTo(SCREEN_WIDTH / 2);
     }];
 
     [self.selectLineView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.width.mas_equalTo(64);
-      make.height.mas_equalTo(2);
-      make.bottom.mas_equalTo(-2);
-      make.centerX.equalTo(self.raiseButton);
+        make.width.mas_equalTo(64);
+        make.height.mas_equalTo(2);
+        make.bottom.mas_equalTo(-2);
+        make.centerX.equalTo(self.raiseButton);
     }];
 
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.center.equalTo(self);
+        make.center.equalTo(self);
     }];
 }
 
@@ -76,10 +76,10 @@
     [self.audienceButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
     [self.selectLineView mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.width.mas_equalTo(64);
-      make.height.mas_equalTo(2);
-      make.bottom.mas_equalTo(-2);
-      make.centerX.equalTo(self.raiseButton);
+        make.width.mas_equalTo(64);
+        make.height.mas_equalTo(2);
+        make.bottom.mas_equalTo(-2);
+        make.centerX.equalTo(self.raiseButton);
     }];
 
     if ([self.delegate respondsToSelector:@selector(liveCoHostTopSelectView:clickSwitchItem:)]) {
@@ -92,10 +92,10 @@
     [self.raiseButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
     [self.selectLineView mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.width.mas_equalTo(64);
-      make.height.mas_equalTo(2);
-      make.bottom.mas_equalTo(-2);
-      make.centerX.equalTo(self.audienceButton);
+        make.width.mas_equalTo(64);
+        make.height.mas_equalTo(2);
+        make.bottom.mas_equalTo(-2);
+        make.centerX.equalTo(self.audienceButton);
     }];
 
     if ([self.delegate respondsToSelector:@selector(liveCoHostTopSelectView:clickSwitchItem:)]) {

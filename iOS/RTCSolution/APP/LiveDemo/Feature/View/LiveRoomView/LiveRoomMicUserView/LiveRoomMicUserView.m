@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomMicUserView.h"
 //#import "LiveUserAvatarCell.h"
@@ -20,8 +20,8 @@
     if (self) {
         [self addSubview:self.collectionView];
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.top.equalTo(self);
-          make.left.right.bottom.equalTo(self);
+            make.top.equalTo(self);
+            make.left.right.bottom.equalTo(self);
         }];
     }
     return self;

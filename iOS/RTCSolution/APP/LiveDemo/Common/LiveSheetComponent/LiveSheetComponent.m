@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveSheetComponent.h"
 
@@ -19,7 +19,7 @@
     static LiveSheetComponent *liveSheetComponent = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-      liveSheetComponent = [[LiveSheetComponent alloc] init];
+        liveSheetComponent = [[LiveSheetComponent alloc] init];
     });
     return liveSheetComponent;
 }
@@ -37,8 +37,8 @@
 
     [rootVC.view addSubview:self.maskButton];
     [self.maskButton mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.width.left.height.equalTo(rootVC.view);
-      make.top.equalTo(rootVC.view).offset(SCREEN_HEIGHT);
+        make.width.left.height.equalTo(rootVC.view);
+        make.top.equalTo(rootVC.view).offset(SCREEN_HEIGHT);
     }];
 
     UIView *contentView = [[UIView alloc] init];
@@ -47,10 +47,10 @@
     contentView.layer.masksToBounds = YES;
     [self.maskButton addSubview:contentView];
     [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.left.mas_equalTo(0);
-      make.right.mas_equalTo(0);
-      make.height.mas_offset(list.count * 48 + [DeviceInforTool getVirtualHomeHeight]);
-      make.bottom.mas_offset(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_offset(list.count * 48 + [DeviceInforTool getVirtualHomeHeight]);
+        make.bottom.mas_offset(0);
     }];
     _contentView = contentView;
 
@@ -77,7 +77,7 @@
                                  leadSpacing:0
                                  tailSpacing:[DeviceInforTool getVirtualHomeHeight]];
     [buttonList mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.left.right.equalTo(self.contentView);
+        make.left.right.equalTo(self.contentView);
     }];
 
     // Start animation
@@ -85,10 +85,10 @@
     [self.maskButton.superview setNeedsUpdateConstraints];
     [UIView animateWithDuration:0.25
                      animations:^{
-                       [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
-                         make.top.equalTo(rootVC.view).offset(0);
-                       }];
-                       [self.maskButton.superview layoutIfNeeded];
+                         [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
+                             make.top.equalTo(rootVC.view).offset(0);
+                         }];
+                         [self.maskButton.superview layoutIfNeeded];
                      }];
 }
 

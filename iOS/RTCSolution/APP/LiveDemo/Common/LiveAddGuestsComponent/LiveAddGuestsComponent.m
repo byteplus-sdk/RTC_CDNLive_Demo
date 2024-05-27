@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveAddGuestsComponent.h"
 #import "LiveAddGuestsApplyView.h"
@@ -44,13 +44,13 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
 - (void)showList:(void (^)(LiveAddGuestsDismissState state))dismissBlock {
     self.dismissBlock = dismissBlock;
     UIViewController *rootVC = [DeviceInforTool topViewController];
-    
+
     [rootVC.view addSubview:self.maskButton];
     [self.maskButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.left.height.equalTo(rootVC.view);
         make.top.equalTo(rootVC.view).offset(SCREEN_HEIGHT);
     }];
-    
+
     LiveAddGuestsListsView *listsView = [[LiveAddGuestsListsView alloc] init];
     listsView.delegate = self;
     listsView.backgroundColor = [UIColor colorFromHexString:@"#272E3B"];
@@ -62,7 +62,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         make.bottom.mas_offset(0);
     }];
     _listsView = listsView;
-    
+
     UILabel *label = [[UILabel alloc] init];
     label.backgroundColor = [UIColor colorFromHexString:@"#272E3B"];
     label.text = LocalizedString(@"add_guests");
@@ -75,7 +75,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         make.bottom.equalTo(listsView.mas_top);
         make.height.mas_equalTo(44);
     }];
-    
+
     BaseButton *closeConnectButton = [[BaseButton alloc] init];
     [closeConnectButton addTarget:self action:@selector(closeConnectAction) forControlEvents:UIControlEventTouchUpInside];
     [closeConnectButton setBackgroundColor:[UIColor clearColor]];
@@ -89,17 +89,17 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
     }];
     closeConnectButton.hidden = _isConnect ? NO : YES;
     _closeConnectButton = closeConnectButton;
-    
+
     [rootVC.view layoutIfNeeded];
     [self.maskButton.superview setNeedsUpdateConstraints];
     [UIView animateWithDuration:0.25
                      animations:^{
-        [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(rootVC.view).offset(0);
-        }];
-        [self.maskButton.superview layoutIfNeeded];
-    }];
-    
+                         [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
+                             make.top.equalTo(rootVC.view).offset(0);
+                         }];
+                         [self.maskButton.superview layoutIfNeeded];
+                     }];
+
     [self loadDataWithGetAudienceList];
 }
 
@@ -135,11 +135,11 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
     _isConnect = YES;
     _hostUid = hostUid;
     _userList = userList;
-    
+
     if ([hostUid isEqualToString:[LocalUserComponent userModel].uid]) {
         [[LiveRTCManager shareRtc] pauseRemoteAudioSubscribedStream:NO];
         __weak __typeof(self) wself = self;
-        [LiveRTCManager shareRtc].onUserPublishStreamBlock = ^(NSString * _Nonnull uid) {
+        [LiveRTCManager shareRtc].onUserPublishStreamBlock = ^(NSString *_Nonnull uid) {
             [[LiveRTCManager shareRtc] updateTranscodingLayout:userList
                                                      mixStatus:RTCMixStatusAddGuests
                                                      rtcRoomId:wself.roomInfoModel.rtcRoomId];
@@ -151,7 +151,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         // Update the guest's own resolution
         [self loadDataWithupdateRes:YES];
     }
-    
+
     // Update UI
     if (!_liveAddGuestsRoomView) {
         LiveAddGuestsRoomView *liveAddGuestsRoomView = [[LiveAddGuestsRoomView alloc] initWithHostID:hostUid roomInfoModel:self.roomInfoModel];
@@ -162,7 +162,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         _liveAddGuestsRoomView = liveAddGuestsRoomView;
     }
     [_liveAddGuestsRoomView updateGuests:userList];
-    
+
     // Sheet
     __weak __typeof(self) wself = self;
     _liveAddGuestsRoomView.clickGuestsBlock = ^(LiveUserModel *_Nonnull userModel) {
@@ -171,12 +171,12 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
             [wself showSheetView:userModel];
         }
     };
-    
+
     // Enable network monitoring
     [[LiveRTCManager shareRtc] didChangeNetworkQuality:^(LiveNetworkQualityStatus status, NSString *_Nonnull uid) {
         dispatch_queue_async_safe(dispatch_get_main_queue(), (^{
-            [wself.liveAddGuestsRoomView updateNetworkQuality:status uid:uid];
-        }));
+                                      [wself.liveAddGuestsRoomView updateNetworkQuality:status uid:uid];
+                                  }));
     }];
 }
 
@@ -202,16 +202,16 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
 
 - (void)closeAddGuests {
     _isConnect = NO;
-    
+
     if ([_hostUid isEqualToString:[LocalUserComponent userModel].uid]) {
         [[LiveRTCManager shareRtc] stopForwardStreamToRooms];
         LiveUserModel *ownerUserModel = [[LiveUserModel alloc] init];
         ownerUserModel.uid = [LocalUserComponent userModel].uid;
-        
+
         [[LiveRTCManager shareRtc] updateTranscodingLayout:@[ownerUserModel]
                                                  mixStatus:RTCMixStatusSingleLive
                                                  rtcRoomId:self.roomInfoModel.rtcRoomId];
-        
+
         [LiveRTCManager shareRtc].onUserPublishStreamBlock = nil;
     } else {
         // Audience
@@ -220,7 +220,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         // Update the guest's own resolution
         [self loadDataWithupdateRes:NO];
     }
-    
+
     if (_liveAddGuestsRoomView) {
         [_liveAddGuestsRoomView removeAllSubviews];
         [_liveAddGuestsRoomView removeFromSuperview];
@@ -258,15 +258,14 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
 
 - (void)showApply:(LiveUserModel *)loginUserModel hostID:(NSString *)hostID {
     UIViewController *rootVC = [DeviceInforTool topViewController];
-    
+
     [rootVC.view addSubview:self.maskButton];
     [self.maskButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.left.height.equalTo(rootVC.view);
         make.top.equalTo(rootVC.view).offset(SCREEN_HEIGHT);
     }];
-    
-    if (loginUserModel.status == LiveInteractStatusApplying
-        && CFAbsoluteTimeGetCurrent() - self.applyTime > LiveApplyOvertimeInterval) {
+
+    if (loginUserModel.status == LiveInteractStatusApplying && CFAbsoluteTimeGetCurrent() - self.applyTime > LiveApplyOvertimeInterval) {
         loginUserModel.status = LiveInteractStatusOther;
     }
     LiveAddGuestsApplyView *applyView = [[LiveAddGuestsApplyView alloc] init];
@@ -280,21 +279,21 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         make.bottom.mas_offset(0);
     }];
     _applyView = applyView;
-    
+
     __weak __typeof(self) wself = self;
     applyView.clickApplyBlock = ^{
         [wself clickApplyAction:hostID];
     };
-    
+
     [rootVC.view layoutIfNeeded];
     [self.maskButton.superview setNeedsUpdateConstraints];
     [UIView animateWithDuration:0.25
                      animations:^{
-        [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(rootVC.view).offset(0);
-        }];
-        [self.maskButton.superview layoutIfNeeded];
-    }];
+                         [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
+                             make.top.equalTo(rootVC.view).offset(0);
+                         }];
+                         [self.maskButton.superview layoutIfNeeded];
+                     }];
 }
 
 - (void)closeApply {
@@ -314,19 +313,19 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
 - (void)clickApplyAction:(NSString *)hostID {
     __weak __typeof(self) wself = self;
     [LiveRTSManager liveAudienceLinkmicApply:self.roomInfoModel.roomID
-                                              block:^(NSString *linkerID,
-                                                      RTSACKModel *model) {
-        if (model.result ||
-            model.code == RTSStatusCodeUserIsInviting ||
-            model.code == RTSStatusCodeUserIsNewInviting) {
-            // Initiate an invitation
-            [[ToastComponent shareToastComponent] showWithMessage:LocalizedString(@"request_sent_waiting")];
-            [wself.applyView updateApplying];
-            wself.applyTime = CFAbsoluteTimeGetCurrent();
-        } else {
-            [[ToastComponent shareToastComponent] showWithMessage:model.message];
-        }
-    }];
+                                       block:^(NSString *linkerID,
+                                               RTSACKModel *model) {
+                                           if (model.result ||
+                                               model.code == RTSStatusCodeUserIsInviting ||
+                                               model.code == RTSStatusCodeUserIsNewInviting) {
+                                               // Initiate an invitation
+                                               [[ToastComponent shareToastComponent] showWithMessage:LocalizedString(@"request_sent_waiting")];
+                                               [wself.applyView updateApplying];
+                                               wself.applyTime = CFAbsoluteTimeGetCurrent();
+                                           } else {
+                                               [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                           }
+                                       }];
 }
 
 - (void)showSheetView:(LiveUserModel *)userModel {
@@ -340,7 +339,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         __strong __typeof(wself) strongSelf = wself;
         [strongSelf loadDataWithAudienceLinkmicKick:userModel];
     };
-    
+
     LiveSheetModel *sheet2Model = [[LiveSheetModel alloc] init];
     sheet2Model.isDisable = !userModel.mic;
     sheet2Model.titleStr = LocalizedString(@"mute");
@@ -348,7 +347,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         __strong __typeof(wself) strongSelf = wself;
         [strongSelf loadDataWithUpdateMediaStatus:userModel mic:0 camera:-1];
     };
-    
+
     LiveSheetModel *sheet3Model = [[LiveSheetModel alloc] init];
     sheet3Model.isDisable = !userModel.camera;
     sheet3Model.titleStr = LocalizedString(@"stop_video");
@@ -356,11 +355,11 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
         __strong __typeof(wself) strongSelf = wself;
         [strongSelf loadDataWithUpdateMediaStatus:userModel mic:-1 camera:0];
     };
-    
+
     LiveSheetModel *sheet4Model = [[LiveSheetModel alloc] init];
     sheet4Model.isDisable = NO;
     sheet4Model.titleStr = LocalizedString(@"cancel");
-    
+
     [list addObject:sheet1Model];
     [list addObject:sheet2Model];
     [list addObject:sheet3Model];
@@ -372,29 +371,29 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
                                   mic:(NSInteger)mic
                                camera:(NSInteger)camera {
     [LiveRTSManager liveManageGuestMedia:self.roomInfoModel.roomID
-                                    guestRoomID:userModel.roomID
-                                    guestUserID:userModel.uid
-                                            mic:mic
-                                         camera:camera
-                                          block:^(RTSACKModel * _Nonnull model) {
-        if (!model.result) {
-            [[ToastComponent shareToastComponent] showWithMessage:model.message];
-        }
-    }];
+                             guestRoomID:userModel.roomID
+                             guestUserID:userModel.uid
+                                     mic:mic
+                                  camera:camera
+                                   block:^(RTSACKModel *_Nonnull model) {
+                                       if (!model.result) {
+                                           [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                       }
+                                   }];
 }
 
 - (void)loadDataWithAudienceLinkmicKick:(LiveUserModel *)userModel {
     __weak __typeof(self) wself = self;
     [LiveRTSManager liveAudienceLinkmicKick:self.roomInfoModel.roomID
-                                    audienceRoomID:userModel.roomID
-                                    audienceUserID:userModel.uid
-                                             block:^(RTSACKModel * _Nonnull model) {
-        if (!model.result) {
-            [[ToastComponent shareToastComponent] showWithMessage:model.message];
-        } else {
-            [wself.liveAddGuestsRoomView removeGuests:userModel.uid];
-        }
-    }];
+                             audienceRoomID:userModel.roomID
+                             audienceUserID:userModel.uid
+                                      block:^(RTSACKModel *_Nonnull model) {
+                                          if (!model.result) {
+                                              [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                          } else {
+                                              [wself.liveAddGuestsRoomView removeGuests:userModel.uid];
+                                          }
+                                      }];
 }
 
 #pragma mark - Load Data
@@ -402,23 +401,23 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
 - (void)loadDataWithGetAudienceList {
     __weak __typeof(self) wself = self;
     [LiveRTSManager liveGetAudienceList:self.roomInfoModel.roomID
-                                         block:^(NSArray<LiveUserModel *> *userList,
-                                                 RTSACKModel *_Nonnull model) {
-        if (model.result) {
-            wself.listsView.dataLists = userList;
-        }
-    }];
+                                  block:^(NSArray<LiveUserModel *> *userList,
+                                          RTSACKModel *_Nonnull model) {
+                                      if (model.result) {
+                                          wself.listsView.dataLists = userList;
+                                      }
+                                  }];
 }
 
 - (void)loadDataWithupdateRes:(BOOL)isOnMic {
     CGSize videoSize = isOnMic ? [LiveSettingVideoConfig defultVideoConfig].guestVideoSize : CGSizeZero;
     [LiveRTSManager liveUpdateResWithSize:videoSize
-                                          roomID:self.roomInfoModel.roomID
-                                           block:^(RTSACKModel * _Nonnull model) {
-        if (model.result) {
-            [[LiveRTCManager shareRtc] updateVideoEncoderResolution:videoSize];
-        }
-    }];
+                                   roomID:self.roomInfoModel.roomID
+                                    block:^(RTSACKModel *_Nonnull model) {
+                                        if (model.result) {
+                                            [[LiveRTCManager shareRtc] updateVideoEncoderResolution:videoSize];
+                                        }
+                                    }];
 }
 
 #pragma mark - LiveCoHostRaiseHandListsViewDelegate
@@ -430,18 +429,18 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
                                audienceRoomID:model.roomID
                                audienceUserID:model.uid
                                         extra:@""
-                                        block:^(NSString * _Nullable linkerID,
-                                                RTSACKModel * ackModel) {
-        if (ackModel.result ||
-            ackModel.code == RTSStatusCodeUserIsInviting ||
-            ackModel.code == RTSStatusCodeUserIsNewInviting) {
-            [wself dismissUserListView:LiveAddGuestsDismissStateInvite];
-            NSString *message = [NSString stringWithFormat:LocalizedString(@"%@ waiting_response."), model.name];
-            [[ToastComponent shareToastComponent] showWithMessage:message];
-        } else {
-            [[ToastComponent shareToastComponent] showWithMessage:ackModel.message];
-        }
-    }];
+                                        block:^(NSString *_Nullable linkerID,
+                                                RTSACKModel *ackModel) {
+                                            if (ackModel.result ||
+                                                ackModel.code == RTSStatusCodeUserIsInviting ||
+                                                ackModel.code == RTSStatusCodeUserIsNewInviting) {
+                                                [wself dismissUserListView:LiveAddGuestsDismissStateInvite];
+                                                NSString *message = [NSString stringWithFormat:LocalizedString(@"%@ waiting_response."), model.name];
+                                                [[ToastComponent shareToastComponent] showWithMessage:message];
+                                            } else {
+                                                [[ToastComponent shareToastComponent] showWithMessage:ackModel.message];
+                                            }
+                                        }];
 }
 
 #pragma mark - Private Action
@@ -458,7 +457,7 @@ NSTimeInterval const LiveApplyOvertimeInterval = 4.0;
     [self.maskButton removeAllSubviews];
     [self.maskButton removeFromSuperview];
     self.maskButton = nil;
-    
+
     if (self.dismissBlock) {
         self.dismissBlock(state);
     }

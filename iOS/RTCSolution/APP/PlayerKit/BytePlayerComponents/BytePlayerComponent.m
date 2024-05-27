@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "BytePlayerComponent.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
@@ -19,10 +19,10 @@
 - (void)startPlayWithUrl:(NSString *)urlString
                superView:(UIView *)superView {
     _currentURLString = urlString;
-    
+
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
     [options setFormatOptionIntValue:1 forKey:@"reconnect"];
-    
+
     NSURL *url = [NSURL URLWithString:urlString];
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:url withOptions:options];
     self.player.shouldAutoplay = YES;
@@ -81,17 +81,17 @@
                                              selector:@selector(loadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
                                                object:self.player];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moviePlayBackFinish:)
                                                  name:IJKMPMoviePlayerPlaybackDidFinishNotification
                                                object:self.player];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(mediaIsPreparedToPlayDidChange:)
                                                  name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification
                                                object:self.player];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moviePlayBackStateDidChange:)
                                                  name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
@@ -102,29 +102,29 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:IJKMPMoviePlayerLoadStateDidChangeNotification
                                                   object:self.player];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:IJKMPMoviePlayerPlaybackDidFinishNotification
                                                   object:self.player];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification
                                                   object:self.player];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
                                                   object:self.player];
 }
 
 #pragma mark - observer
-- (void)loadStateDidChange:(NSNotification *)notification{
+- (void)loadStateDidChange:(NSNotification *)notification {
     IJKMPMovieLoadState loadState = self.player.loadState;
-    NSLog(@"LivePullStreamCompoments loadStateDidChange : %d",(int)loadState);
+    NSLog(@"LivePullStreamCompoments loadStateDidChange : %d", (int)loadState);
 }
 
 - (void)moviePlayBackFinish:(NSNotification *)notification {
     int reason = [[[notification userInfo] valueForKey:IJKMPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
-    NSLog(@"LivePullStreamCompoments playBackFinish : %d",reason);
+    NSLog(@"LivePullStreamCompoments playBackFinish : %d", reason);
     if (reason == IJKMPMovieFinishReasonPlaybackError) {
         NSString *urlStr = _currentURLString;
         UIView *superView = self.player.view.superview;
@@ -133,11 +133,11 @@
     }
 }
 
-- (void)mediaIsPreparedToPlayDidChange:(NSNotification *)notification{
+- (void)mediaIsPreparedToPlayDidChange:(NSNotification *)notification {
     NSLog(@"LivePullStreamCompoments mediaIsPrepareToPlayDidChange");
 }
 
-- (void)moviePlayBackStateDidChange:(NSNotification *)notification{
+- (void)moviePlayBackStateDidChange:(NSNotification *)notification {
     switch (_player.playbackState) {
         case IJKMPMoviePlaybackStateStopped:
             NSLog(@"LivePullStreamCompoments playBackState %d: stoped", (int)self.player.playbackState);
@@ -167,14 +167,14 @@
 }
 
 - (void)protocol:(BytedPlayerProtocol *)protocol
-setPlayerWithURL:(NSString *)urlString
-       superView:(UIView *)superView
-        SEIBlcok:(void (^)(NSDictionary * _Nonnull))SEIBlcok {
+    setPlayerWithURL:(NSString *)urlString
+           superView:(UIView *)superView
+            SEIBlcok:(void (^)(NSDictionary *_Nonnull))SEIBlcok {
     [self startPlayWithUrl:urlString superView:superView];
 }
 
 - (void)protocol:(BytedPlayerProtocol *)protocol
-updatePlayScaleMode:(PullScalingMode)scalingMode {
+    updatePlayScaleMode:(PullScalingMode)scalingMode {
     [self updatePlayScaleMode:scalingMode];
 }
 
@@ -197,6 +197,5 @@ updatePlayScaleMode:(PullScalingMode)scalingMode {
 - (BOOL)protocolIsSupportSEI {
     return NO;
 }
-
 
 @end

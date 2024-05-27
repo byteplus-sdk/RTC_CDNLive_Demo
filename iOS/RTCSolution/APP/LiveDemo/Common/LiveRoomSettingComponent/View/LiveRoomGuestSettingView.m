@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomGuestSettingView.h"
 #import "LiveRoomSettingResolutionView.h"
@@ -30,14 +30,14 @@
 
         [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.centerX.equalTo(self);
-          make.top.mas_equalTo(16);
+            make.centerX.equalTo(self);
+            make.top.mas_equalTo(16);
         }];
 
-        NSArray *items = @[ @[ LocalizedString(@"resolution"), @"InteractiveLive_setting_resoluton", @"" ],
-                            @[ LocalizedString(@"camera_flip"), @"InteractiveLive_setting_switch_camera", @"" ],
-                            @[ LocalizedString(@"microphone"), @"InteractiveLive_setting_audio_enable", @"InteractiveLive_setting_audio_disable" ],
-                            @[ LocalizedString(@"camera"), @"InteractiveLive_setting_video_enable", @"InteractiveLive_setting_video_disable" ] ];
+        NSArray *items = @[@[LocalizedString(@"resolution"), @"InteractiveLive_setting_resoluton", @""],
+                           @[LocalizedString(@"camera_flip"), @"InteractiveLive_setting_switch_camera", @""],
+                           @[LocalizedString(@"microphone"), @"InteractiveLive_setting_audio_enable", @"InteractiveLive_setting_audio_disable"],
+                           @[LocalizedString(@"camera"), @"InteractiveLive_setting_video_enable", @"InteractiveLive_setting_video_disable"]];
 
         for (int i = 0; i < items.count; i++) {
             NSString *title = items[i][0];
@@ -56,10 +56,10 @@
             [self.buttons addObject:button];
 
             [button mas_makeConstraints:^(MASConstraintMaker *make) {
-              make.centerX.equalTo(self).multipliedBy(0.5 * i + 0.25);
-              make.top.equalTo(self.titleLabel.mas_bottom).offset(16);
-              make.width.mas_equalTo(44);
-              make.height.mas_equalTo(68);
+                make.centerX.equalTo(self).multipliedBy(0.5 * i + 0.25);
+                make.top.equalTo(self.titleLabel.mas_bottom).offset(16);
+                make.width.mas_equalTo(44);
+                make.height.mas_equalTo(68);
             }];
 
             if (i == 0) {
@@ -71,7 +71,7 @@
 
         [self addSubview:self.resolutionView];
         [self.resolutionView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
     }
     return self;

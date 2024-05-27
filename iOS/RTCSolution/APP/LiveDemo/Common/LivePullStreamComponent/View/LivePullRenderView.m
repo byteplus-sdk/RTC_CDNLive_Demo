@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LivePullRenderView.h"
 #import "LiveHostAvatarView.h"
@@ -33,34 +33,34 @@
         [self.noStreamingView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
-        
+
         [self addSubview:self.streamView];
         [self.streamView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
-        
+
         [self.streamView addSubview:self.coHostMaskView];
         [self.coHostMaskView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.streamView);
         }];
-        
+
         [self.streamView addSubview:self.liveView];
         [self.liveView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.streamView);
         }];
-        
+
         [self.streamView addSubview:self.topMaskImageView];
         [self.topMaskImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.equalTo(self.streamView);
             make.height.mas_equalTo(42);
         }];
-        
+
         [self.streamView addSubview:self.iconImageView];
         [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(90, 20));
             make.top.centerX.equalTo(self.streamView);
         }];
-        
+
         [self.iconImageView addSubview:self.connectingLabel];
         [self.connectingLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(66);
@@ -73,7 +73,7 @@
 - (void)setStatus:(PullRenderStatus)status {
     if (_status != status) {
         _status = status;
-        
+
         [self addSubview:self.streamView];
         if (status == PullRenderStatusCoHst) {
             [self.streamView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -98,13 +98,13 @@
         }
         self.streamView.alpha = 0;
         [UIView animateWithDuration:0.3
-                              delay:0.2
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-            self.streamView.alpha = 1;
-        } completion:^(BOOL finished) {
-            self.streamView.alpha = 1;
-        }];
+            delay:0.2
+            options:UIViewAnimationOptionCurveEaseInOut
+            animations:^{
+                self.streamView.alpha = 1;
+            } completion:^(BOOL finished) {
+                self.streamView.alpha = 1;
+            }];
     }
 }
 

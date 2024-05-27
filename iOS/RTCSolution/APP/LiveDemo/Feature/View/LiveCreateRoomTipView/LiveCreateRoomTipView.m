@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCreateRoomTipView.h"
 
@@ -23,23 +23,23 @@
         [self addSubview:self.contentView];
         [self addSubview:self.tipLabel];
         [self.tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.left.mas_equalTo(34);
-          make.top.mas_equalTo(8);
-          make.right.mas_lessThanOrEqualTo(-10);
+            make.left.mas_equalTo(34);
+            make.top.mas_equalTo(8);
+            make.right.mas_lessThanOrEqualTo(-10);
         }];
 
         [self addSubview:self.tipImageView];
         [self.tipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.left.mas_equalTo(11);
-          make.width.height.mas_equalTo(14);
-          make.centerY.equalTo(self.tipLabel);
+            make.left.mas_equalTo(11);
+            make.width.height.mas_equalTo(14);
+            make.centerY.equalTo(self.tipLabel);
         }];
 
         [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.left.equalTo(self.tipLabel).offset(-34);
-          make.top.equalTo(self.tipLabel).offset(-8);
-          make.right.equalTo(self.tipLabel).offset(8);
-          make.bottom.equalTo(self.tipLabel).offset(8);
+            make.left.equalTo(self.tipLabel).offset(-34);
+            make.top.equalTo(self.tipLabel).offset(-8);
+            make.right.equalTo(self.tipLabel).offset(8);
+            make.bottom.equalTo(self.tipLabel).offset(8);
         }];
     }
     return self;
@@ -51,7 +51,7 @@
     self.tipLabel.text = message;
 
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.bottom.equalTo(self.contentView);
+        make.bottom.equalTo(self.contentView);
     }];
 }
 

@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveNoStreamingView.h"
 #import "LiveAvatarView.h"
@@ -22,13 +22,13 @@
     if (self) {
         [self addSubview:self.bgMaskView];
         [self.bgMaskView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
 
         [self addSubview:self.avatarComponent];
         [self.avatarComponent mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.width.height.mas_equalTo(160);
-          make.center.equalTo(self);
+            make.width.height.mas_equalTo(160);
+            make.center.equalTo(self);
         }];
     }
     return self;
@@ -52,8 +52,8 @@
     UIColor *endColor = [UIColor colorFromRGBHexString:@"#1D2129"];
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
     gradientLayer.frame = self.bgMaskView.bounds;
-    gradientLayer.colors = @[ (__bridge id)[startColor colorWithAlphaComponent:1.0].CGColor,
-                              (__bridge id)[endColor colorWithAlphaComponent:1.0].CGColor ];
+    gradientLayer.colors = @[(__bridge id)[startColor colorWithAlphaComponent:1.0].CGColor,
+                             (__bridge id)[endColor colorWithAlphaComponent:1.0].CGColor];
     gradientLayer.startPoint = CGPointMake(.0, .0);
     gradientLayer.endPoint = CGPointMake(1.0, 1.0);
     [self.bgMaskView.layer addSublayer:gradientLayer];

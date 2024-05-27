@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRTCManager.h"
 #import "LiveSettingVideoConfig.h"
@@ -65,10 +65,10 @@
     [self.rtcEngineKit setVideoCaptureConfig:captureConfig];
     // Set the RTC encoding resolution, frame rate, and bit rate.
     [self.rtcEngineKit setMaxVideoEncoderConfig:self.pushRTCVideoConfig];
-    
+
     // Set up video mirroring
     [self.rtcEngineKit setLocalVideoMirrorType:ByteRTCMirrorTypeRenderAndEncoder];
-    
+
     // Confluence retweet Setting
     _mixedStreamConfig = [ByteRTCMixedStreamConfig defaultMixedStreamConfig];
 }
@@ -102,14 +102,14 @@
     [self updateVideoEncoderResolution:videoSize];
     [self.rtcEngineKit stopPushStreamToCDN:@""];
     [self leaveRTCRoom];
-    
+
     [self switchAudioCapture:NO];
     [self switchVideoCapture:NO];
-    
+
     [self.businessRoom leaveRoom];
     [self.businessRoom destroy];
     self.businessRoom = nil;
-    
+
     [self.streamViewDic removeAllObjects];
     self.cameraID = ByteRTCCameraIDFront;
     [self switchCamera:ByteRTCCameraIDFront];
@@ -148,7 +148,7 @@
     if (saveView && NOEmptyStr(saveKey)) {
         [self.streamViewDic setValue:saveView forKey:saveKey];
     }
-    
+
     [self.rtcRoom leaveRoom];
     [self.rtcRoom destroy];
     self.rtcRoom = nil;
@@ -163,18 +163,18 @@
     if (NOEmptyStr(pushUrl)) {
         [self switchVideoCapture:YES];
         [self switchAudioCapture:YES];
-        
+
         if (IsEmptyStr(rtcRoomId)) {
             NSLog(@"Manager RTCSDK startPushMixedStreamToCDN error : roomid nil");
         }
         // Set mix SEI
         NSString *json = [self getSEIJsonWithMixStatus:RTCMixStatusSingleLive];
-        
+
         // Set mix Regions
         NSArray *regions = [self getRegionWithUserList:@[hostUser]
                                              mixStatus:RTCMixStatusSingleLive
                                              rtcRoomId:rtcRoomId];
-        
+
         _mixedStreamConfig.layoutConfig.userConfigExtraInfo = json;
         _mixedStreamConfig.layoutConfig.regions = regions;
         _mixedStreamConfig.roomID = rtcRoomId;
@@ -187,7 +187,7 @@
         _mixedStreamConfig.videoConfig.bitrate = [LiveSettingVideoConfig defultVideoConfig].bitrate;
         _mixedStreamConfig.videoConfig.width = [LiveSettingVideoConfig defultVideoConfig].videoSize.width;
         _mixedStreamConfig.videoConfig.height = [LiveSettingVideoConfig defultVideoConfig].videoSize.height;
-        
+
         [self.rtcEngineKit startPushMixedStreamToCDN:@""
                                          mixedConfig:_mixedStreamConfig
                                             observer:self];
@@ -200,7 +200,7 @@
     // Update the merge layout
     // Set mix SEI
     NSString *json = [self getSEIJsonWithMixStatus:mixStatus];
-    
+
     // Servers merge, take half of the maximum resolution
     CGSize pushRTCVideoSize = [LiveSettingVideoConfig defultVideoConfig].videoSize;
     if (mixStatus == RTCMixStatusCoHost) {
@@ -209,11 +209,11 @@
     self.pushRTCVideoConfig.width = pushRTCVideoSize.width;
     self.pushRTCVideoConfig.height = pushRTCVideoSize.height;
     [self.rtcEngineKit setMaxVideoEncoderConfig:self.pushRTCVideoConfig];
-    
+
     _mixedStreamConfig.layoutConfig.userConfigExtraInfo = json;
     _mixedStreamConfig.layoutConfig.regions = [self getRegionWithUserList:userList
-                                                           mixStatus:mixStatus
-                                                           rtcRoomId:rtcRoomId];
+                                                                mixStatus:mixStatus
+                                                                rtcRoomId:rtcRoomId];
     [self.rtcEngineKit updatePushMixedStreamToCDN:@""
                                       mixedConfig:_mixedStreamConfig];
 }
@@ -223,7 +223,7 @@
     ByteRTCForwardStreamConfiguration *configuration = [[ByteRTCForwardStreamConfiguration alloc] init];
     configuration.roomId = roomId;
     configuration.token = token;
-    
+
     [self.rtcRoom startForwardStreamToRooms:@[configuration]];
 }
 
@@ -232,7 +232,7 @@
     CGSize videoSize = [LiveSettingVideoConfig defultVideoConfig].videoSize;
     self.pushRTCVideoConfig.width = videoSize.width;
     self.pushRTCVideoConfig.height = videoSize.height;
-    
+
     [self.rtcEngineKit setMaxVideoEncoderConfig:self.pushRTCVideoConfig];
     _mixStatus = RTCMixStatusSingleLive;
     [self.rtcRoom stopForwardStreamToRooms];
@@ -293,7 +293,7 @@
     } else {
         [self.rtcRoom resumeAllSubscribedStream:ByteRTCControlMediaTypeAudio];
     }
-    
+
     NSArray *regions = _mixedStreamConfig.layoutConfig.regions;
     for (ByteRTCMixedStreamLayoutRegionConfig *region in regions) {
         if (![region.userID isEqualToString:[LocalUserComponent userModel].uid]) {
@@ -352,15 +352,14 @@
     NSLog(@"Manager RTCSDK onStreamMixingEvent %lu %lu %lu", (unsigned long)Code, (unsigned long)mixType, (unsigned long)event);
 }
 
-
 #pragma mark - ByteRTCRoomDelegate
 
 - (void)rtcRoom:(ByteRTCRoom *)rtcRoom onRoomStateChanged:(NSString *)roomId
-        withUid:(NSString *)uid
-          state:(NSInteger)state
-      extraInfo:(NSString *)extraInfo {
+               withUid:(NSString *)uid
+                 state:(NSInteger)state
+             extraInfo:(NSString *)extraInfo {
     [super rtcRoom:rtcRoom onRoomStateChanged:roomId withUid:uid state:state extraInfo:extraInfo];
-    if ([roomId isEqualToString:self.rtcRoomID] ) {
+    if ([roomId isEqualToString:self.rtcRoomID]) {
         // Join the RTC room successfully
         [self bindCanvasViewToUid:uid];
         dispatch_queue_async_safe(dispatch_get_main_queue(), ^{
@@ -382,15 +381,14 @@
     if (type == ByteRTCMediaStreamTypeBoth ||
         type == ByteRTCMediaStreamTypeVideo) {
         dispatch_queue_async_safe(dispatch_get_main_queue(), (^{
-            if (self.onUserPublishStreamBlock) {
-                self.onUserPublishStreamBlock(userId);
-            }
-        }));
+                                      if (self.onUserPublishStreamBlock) {
+                                          self.onUserPublishStreamBlock(userId);
+                                      }
+                                  }));
     }
 }
 
 - (void)rtcRoom:(ByteRTCRoom *)rtcRoom onLocalStreamStats:(ByteRTCLocalStreamStats *)stats {
-
     LiveNetworkQualityStatus liveStatus = LiveNetworkQualityStatusNone;
     if (stats.txQuality == ByteRTCNetworkQualityExcellent ||
         stats.txQuality == ByteRTCNetworkQualityGood) {
@@ -441,7 +439,7 @@
         canvas.renderMode = ByteRTCRenderModeHidden;
         canvas.view.backgroundColor = [UIColor clearColor];
         canvas.view = streamView;
-        
+
         [self.rtcEngineKit setLocalVideoCanvas:ByteRTCStreamIndexMain
                                     withCanvas:canvas];
         NSString *key = [NSString stringWithFormat:@"self_%@", uid];
@@ -466,59 +464,60 @@
     if (uid.length == 0) {
         return;
     }
-    
+
     dispatch_queue_async_safe(dispatch_get_main_queue(), (^{
-        if ([uid isEqualToString:[LocalUserComponent userModel].uid]) {
-            UIView *view = [self getStreamViewWithUid:uid];
-            if (!view) {
-                UIView *streamView = [[UIView alloc] init];
-                streamView.hidden = YES;
-                ByteRTCVideoCanvas *canvas = [[ByteRTCVideoCanvas alloc] init];
-                canvas.renderMode = ByteRTCRenderModeHidden;
-                canvas.view.backgroundColor = [UIColor clearColor];
-                canvas.view = streamView;
-                [self.rtcEngineKit setLocalVideoCanvas:ByteRTCStreamIndexMain
-                                            withCanvas:canvas];
-                NSString *key = [NSString stringWithFormat:@"self_%@", uid];
-                [self.streamViewDic setValue:streamView forKey:key];
-            }
-        } else {
-            UIView *remoteRoomView = [self getStreamViewWithUid:uid];
-            if (!remoteRoomView) {
-                remoteRoomView = [[UIView alloc] init];
-                remoteRoomView.hidden = YES;
-                ByteRTCVideoCanvas *canvas = [[ByteRTCVideoCanvas alloc] init];
-                canvas.renderMode = ByteRTCRenderModeHidden;
-                canvas.view.backgroundColor = [UIColor clearColor];
-                canvas.view = remoteRoomView;
-                
-                ByteRTCRemoteStreamKey *streamKey = [[ByteRTCRemoteStreamKey alloc] init];
-                streamKey.userId = uid;
-                streamKey.roomId = self.rtcRoomID;
-                streamKey.streamIndex = ByteRTCStreamIndexMain;
-                
-                [self.rtcEngineKit setRemoteVideoCanvas:streamKey
-                                             withCanvas:canvas];
-                
-                NSString *groupKey = [NSString stringWithFormat:@"remote_%@", uid];
-                [self.streamViewDic setValue:remoteRoomView forKey:groupKey];
-            }
-        }
-    }));
+                                  if ([uid isEqualToString:[LocalUserComponent userModel].uid]) {
+                                      UIView *view = [self getStreamViewWithUid:uid];
+                                      if (!view) {
+                                          UIView *streamView = [[UIView alloc] init];
+                                          streamView.hidden = YES;
+                                          ByteRTCVideoCanvas *canvas = [[ByteRTCVideoCanvas alloc] init];
+                                          canvas.renderMode = ByteRTCRenderModeHidden;
+                                          canvas.view.backgroundColor = [UIColor clearColor];
+                                          canvas.view = streamView;
+                                          [self.rtcEngineKit setLocalVideoCanvas:ByteRTCStreamIndexMain
+                                                                      withCanvas:canvas];
+                                          NSString *key = [NSString stringWithFormat:@"self_%@", uid];
+                                          [self.streamViewDic setValue:streamView forKey:key];
+                                      }
+                                  } else {
+                                      UIView *remoteRoomView = [self getStreamViewWithUid:uid];
+                                      if (!remoteRoomView) {
+                                          remoteRoomView = [[UIView alloc] init];
+                                          remoteRoomView.hidden = YES;
+                                          ByteRTCVideoCanvas *canvas = [[ByteRTCVideoCanvas alloc] init];
+                                          canvas.renderMode = ByteRTCRenderModeHidden;
+                                          canvas.view.backgroundColor = [UIColor clearColor];
+                                          canvas.view = remoteRoomView;
+
+                                          ByteRTCRemoteStreamKey *streamKey = [[ByteRTCRemoteStreamKey alloc] init];
+                                          streamKey.userId = uid;
+                                          streamKey.roomId = self.rtcRoomID;
+                                          streamKey.streamIndex = ByteRTCStreamIndexMain;
+
+                                          [self.rtcEngineKit setRemoteVideoCanvas:streamKey
+                                                                       withCanvas:canvas];
+
+                                          NSString *groupKey = [NSString stringWithFormat:@"remote_%@", uid];
+                                          [self.streamViewDic setValue:remoteRoomView forKey:groupKey];
+                                      }
+                                  }
+                              }));
 }
 
 #pragma mark - Private Action
 
 - (NSString *)getSEIJsonWithMixStatus:(RTCMixStatus)mixStatus {
     NSString *value = (mixStatus == RTCMixStatusCoHost) ? kLiveCoreSEIValueSourceCoHost : kLiveCoreSEIValueSourceNone;
-    NSDictionary *dic = @{kLiveCoreSEIKEYSource : value ?: @""};
+    NSDictionary *dic = @{kLiveCoreSEIKEYSource: value ?: @""};
     NSString *json = [dic yy_modelToJSONString];
     return json;
 }
 
-- (NSArray *)getRegionWithUserList:(NSArray <LiveUserModel *> *)userList
+- (NSArray *)getRegionWithUserList:(NSArray<LiveUserModel *> *)userList
                          mixStatus:(RTCMixStatus)mixStatus
                          rtcRoomId:(NSString *)rtcRoomId {
+    CGSize canvasSize = [LiveSettingVideoConfig defultVideoConfig].videoSize;
     NSInteger audienceIndex = 0;
     NSMutableArray *list = [[NSMutableArray alloc] init];
     for (int i = 0; i < userList.count; i++) {
@@ -533,57 +532,59 @@
                 // Single anchor layout
                 region.locationX = 0.0;
                 region.locationY = 0.0;
-                region.widthProportion = 1.0;
-                region.heightProportion = 1.0;
+                region.width = 1.0 * canvasSize.width;
+                region.height = 1.0 * canvasSize.height;
                 region.zOrder = 1;
                 region.alpha = 1.0;
             } break;
-                
+
             case RTCMixStatusCoHost: {
                 // Make Co-host layout
                 if (region.isLocalUser) {
-                    region.locationX = 0.0;
-                    region.locationY = 0.25;
-                    region.widthProportion = 0.5;
-                    region.heightProportion = 0.5;
+                    region.locationX = 0.0 * canvasSize.width;
+                    region.locationY = 0.25 * canvasSize.height;
+                    region.width = 0.5 * canvasSize.width;
+                    region.height = 0.5 * canvasSize.height;
                     region.zOrder = 0;
                     region.alpha = 1.0;
                 } else {
-                    region.locationX = 0.5;
-                    region.locationY = 0.25;
-                    region.widthProportion = 0.5;
-                    region.heightProportion = 0.5;
+                    region.locationX = 0.5 * canvasSize.width;
+                    region.locationY = 0.25 * canvasSize.height;
+                    region.width = 0.5 * canvasSize.width;
+                    region.height = 0.5 * canvasSize.height;
                     region.zOrder = 0;
                     region.alpha = 1.0;
                 }
             } break;
-                
+
             case RTCMixStatusAddGuests: {
                 // Make Guests layout
                 if (region.isLocalUser) {
                     region.locationX = 0.0;
                     region.locationY = 0.0;
-                    region.widthProportion = 1.0;
-                    region.heightProportion = 1.0;
+                    region.width = 1.0 * canvasSize.width;
+                    region.height = 1.0 * canvasSize.height;
                     region.zOrder = 1;
                     region.alpha = 1.0;
                 } else {
-                    CGFloat screenW = 365.0;
-                    CGFloat screenH = 667.0;
-                    CGFloat itemHeight = 80.0;
-                    CGFloat itemSpace = 6.0;
-                    CGFloat itemRightSpace = 52;
-                    CGFloat itemTopSpace = 500.0;
+                    CGFloat verticalScale = canvasSize.height / SCREEN_HEIGHT;
+                    CGFloat horizontalScale = canvasSize.width / SCREEN_WIDTH;
+                    CGFloat screenW = canvasSize.width;
+                    CGFloat screenH = canvasSize.height;
+                    CGFloat itemHeight = 80.0 * verticalScale;
+                    CGFloat itemSpace = 6.0 * verticalScale;
+                    CGFloat itemRightSpace = 52 * verticalScale;
+                    CGFloat itemTopSpace = 500.0 * horizontalScale;
                     NSInteger index = audienceIndex++;
-                    CGFloat regionHeight = itemHeight / screenH;
-                    CGFloat regionWidth = regionHeight * screenH / screenW;
-                    CGFloat regionY = (itemTopSpace - (itemHeight + itemSpace) * index) / screenH;
-                    CGFloat regionX = 1 - (regionHeight * screenH + itemRightSpace) / screenW;
+                    CGFloat regionHeight = itemHeight;
+                    CGFloat regionWidth = itemHeight;
+                    CGFloat regionY = itemTopSpace - (itemHeight + itemSpace) * index;
+                    CGFloat regionX = screenW - (regionHeight + itemRightSpace);
 
                     region.locationX = regionX;
                     region.locationY = regionY;
-                    region.widthProportion = regionWidth;
-                    region.heightProportion = regionHeight;
+                    region.width = regionWidth;
+                    region.height = regionHeight;
                     region.zOrder = 2;
                     region.alpha = 1.0;
                 }

@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveAddGuestsItemView.h"
 #import "LiveAvatarView.h"
@@ -30,12 +30,12 @@
             self.layer.masksToBounds = YES;
         }
         self.backgroundColor = [UIColor colorFromHexString:@"#1D2129"];
-        
+
         [self addSubview:self.renderView];
         [self.renderView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
-        
+
         [self addSubview:self.netQualityView];
         [self.netQualityView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(12);
@@ -43,27 +43,27 @@
             make.top.mas_equalTo(3);
             make.right.equalTo(self);
         }];
-        
+
         [self addSubview:self.micImageView];
         [self.micImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(12, 12));
             make.left.mas_equalTo(2);
             make.bottom.mas_equalTo(-2);
         }];
-        
+
         [self addSubview:self.userNameLabel];
         [self.userNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(16);
             make.bottom.mas_equalTo(-2);
             make.right.mas_lessThanOrEqualTo(self.mas_right).offset(-2);
         }];
-        
+
         [self addSubview:self.avatarComponent];
         [self.avatarComponent mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(32, 32));
             make.center.equalTo(self);
         }];
-        
+
         [self addSubview:self.maskButton];
         [self.maskButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
@@ -74,7 +74,7 @@
 
 - (void)setUserModel:(LiveUserModel *)userModel {
     _userModel = userModel;
-    
+
     [[LiveRTCManager shareRtc] bindCanvasViewToUid:userModel.uid];
     UIView *rtcStreamView = [[LiveRTCManager shareRtc] getStreamViewWithUid:userModel.uid];
     if (userModel.camera) {
@@ -95,7 +95,7 @@
     [self.userNameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.micImageView.hidden ? 2 : 16);
     }];
-    
+
     if ([userModel.uid isEqualToString:[LocalUserComponent userModel].uid]) {
         [[LiveRTCManager shareRtc] switchVideoCapture:userModel.camera];
         [[LiveRTCManager shareRtc] switchAudioCapture:userModel.mic];

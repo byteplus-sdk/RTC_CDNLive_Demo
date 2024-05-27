@@ -1,15 +1,15 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
+#import "BytedEffectProtocol.h"
 #import "LiveReconnectModel.h"
 #import "LiveRoomInfoModel.h"
 #import "LiveRoomSettingComponent.h"
 #import "LiveUserModel.h"
 #import "RoomStatusModel.h"
 #import <UIKit/UIKit.h>
-#import "BytedEffectProtocol.h"
 
 @interface LiveRoomViewController : UIViewController
 
@@ -27,7 +27,7 @@
  * @param audienceCount current number of users in the room
  */
 - (void)addUser:(LiveUserModel *)userModel
-  audienceCount:(NSInteger)audienceCount;
+    audienceCount:(NSInteger)audienceCount;
 
 /**
  * @brief Received when the user left the room
@@ -132,7 +132,6 @@
                               linkerID:(NSString *)linkerID
                                  extra:(NSString *)extra;
 
-
 /**
  * @brief Received an invitation from the make guests
  * @param inviter Inviter user model
@@ -148,7 +147,6 @@
  * @param invitee Invited guest user model
  */
 - (void)receivedAddGuestsRefuseWithUser:(LiveUserModel *)invitee;
-
 
 /**
  * @brief Received the change of the anchor and guest's camera and microphone switch
@@ -178,7 +176,6 @@
  */
 - (void)receivedAddGuestsJoin:(NSArray<LiveUserModel *> *)userlList;
 
-
 /**
  * @brief Received the news that the host and guest are connected and the guest has left
  * @param uid guest user ID
@@ -186,11 +183,9 @@
  */
 - (void)receivedAddGuestsRemoveWithUser:(NSString *)uid userList:(NSArray<LiveUserModel *> *)userList;
 
-
 /**
  * @brief Received make guests end
  */
 - (void)receivedAddGuestsEnd;
-
 
 @end

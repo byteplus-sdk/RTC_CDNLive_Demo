@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCoHostComponent.h"
 #import "LiveCoHostRoomView.h"
@@ -36,13 +36,13 @@
 - (void)showInviteList:(void (^)(LiveCoHostDismissState state))dismissBlock {
     self.dismissBlock = dismissBlock;
     UIViewController *rootVC = [DeviceInforTool topViewController];
-    
+
     [rootVC.view addSubview:self.maskButton];
     [self.maskButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.left.height.equalTo(rootVC.view);
         make.top.equalTo(rootVC.view).offset(SCREEN_HEIGHT);
     }];
-    
+
     LiveCoHostAudienceListsView *audienceListsView = [[LiveCoHostAudienceListsView alloc] init];
     audienceListsView.delegate = self;
     audienceListsView.backgroundColor = [UIColor colorFromHexString:@"#272E3B"];
@@ -54,7 +54,7 @@
         make.bottom.mas_offset(0);
     }];
     _audienceListsView = audienceListsView;
-    
+
     LiveCoHostRaiseHandListsView *raiseHandListsView = [[LiveCoHostRaiseHandListsView alloc] init];
     raiseHandListsView.delegate = self;
     raiseHandListsView.backgroundColor = [UIColor colorFromHexString:@"#272E3B"];
@@ -63,7 +63,7 @@
         make.edges.equalTo(audienceListsView);
     }];
     _raiseHandListsView = raiseHandListsView;
-    
+
     LiveCoHostTopSelectView *topSelectView = [[LiveCoHostTopSelectView alloc] init];
     topSelectView.delegate = self;
     [self.maskButton addSubview:topSelectView];
@@ -72,18 +72,18 @@
         make.bottom.equalTo(audienceListsView.mas_top);
         make.height.mas_equalTo(44);
     }];
-    
+
     // Start animation
     [rootVC.view layoutIfNeeded];
     [self.maskButton.superview setNeedsUpdateConstraints];
     [UIView animateWithDuration:0.25
                      animations:^{
-        [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(rootVC.view).offset(0);
-        }];
-        [self.maskButton.superview layoutIfNeeded];
-    }];
-    
+                         [self.maskButton mas_updateConstraints:^(MASConstraintMaker *make) {
+                             make.top.equalTo(rootVC.view).offset(0);
+                         }];
+                         [self.maskButton.superview layoutIfNeeded];
+                     }];
+
     [self loadDataWithRaiseHandLists];
 }
 
@@ -103,45 +103,45 @@
 #pragma mark - Publish Room Action
 
 - (void)showCoHost:(UIView *)superView
-     streamPushUrl:(NSString *)streamPushUrl
-     userModelList:(NSArray<LiveUserModel *> *)userModelList
-    loginUserModel:(LiveUserModel *)loginUserModel
- otherAnchorRoomId:(NSString *)otherRoomId
-  otherAnchorToken:(NSString *)otherToken
-     completeBlock:(void (^)(void))completeBlock {
+        streamPushUrl:(NSString *)streamPushUrl
+        userModelList:(NSArray<LiveUserModel *> *)userModelList
+       loginUserModel:(LiveUserModel *)loginUserModel
+    otherAnchorRoomId:(NSString *)otherRoomId
+     otherAnchorToken:(NSString *)otherToken
+        completeBlock:(void (^)(void))completeBlock {
     _isConnect = YES;
     _userModelList = userModelList;
-    
+
     [[LiveRTCManager shareRtc] pauseRemoteAudioSubscribedStream:NO];
     // Enable span the room retweet stream
     [[LiveRTCManager shareRtc] startForwardStreamToRooms:otherRoomId
                                                    token:otherToken];
     // Receive the audio and video stream retweeted across the room by the host of the other party
     __weak __typeof(self) wself = self;
-    [LiveRTCManager shareRtc].onUserPublishStreamBlock = ^(NSString * _Nonnull uid) {
+    [LiveRTCManager shareRtc].onUserPublishStreamBlock = ^(NSString *_Nonnull uid) {
         LiveUserModel *otherUserModel = [wself getOtherUserModel:userModelList];
         if ([uid isEqualToString:otherUserModel.uid]) {
             // Update confluence retweet
             [[LiveRTCManager shareRtc] updateTranscodingLayout:userModelList
                                                      mixStatus:RTCMixStatusCoHost
                                                      rtcRoomId:wself.roomInfoModel.rtcRoomId];
-            
+
             // UI
             [wself updateCoHostRoomView:superView
                           userModelList:userModelList
                          loginUserModel:loginUserModel];
-            
+
             if (completeBlock) {
                 completeBlock();
             }
         }
     };
-    
+
     // Enable network monitoring
     [[LiveRTCManager shareRtc] didChangeNetworkQuality:^(LiveNetworkQualityStatus status, NSString *_Nonnull uid) {
         dispatch_queue_async_safe(dispatch_get_main_queue(), (^{
-            [wself.liveCoHostRoomView updateNetworkQuality:status uid:uid];
-        }));
+                                      [wself.liveCoHostRoomView updateNetworkQuality:status uid:uid];
+                                  }));
     }];
 }
 
@@ -160,25 +160,25 @@
                                          uid:loginUserModel.uid];
     [self.liveCoHostRoomView updateGuestsCamera:loginUserModel.camera
                                             uid:loginUserModel.uid];
-    
+
     // Update local UI layout
     self.liveCoHostRoomView.userModelList = userModelList;
 }
 
 - (void)closeCoHost {
     _isConnect = NO;
-    
+
     // Stop span the room retweet stream
     [[LiveRTCManager shareRtc] stopForwardStreamToRooms];
     // Update confluence retweet
     LiveUserModel *ownerUserModel = [[LiveUserModel alloc] init];
     ownerUserModel.uid = [LocalUserComponent userModel].uid;
-    
+
     [[LiveRTCManager shareRtc] updateTranscodingLayout:@[ownerUserModel]
                                              mixStatus:RTCMixStatusSingleLive
                                              rtcRoomId:self.roomInfoModel.rtcRoomId];
     [LiveRTCManager shareRtc].onUserPublishStreamBlock = nil;
-    
+
     if (self.liveCoHostRoomView) {
         [self.liveCoHostRoomView removeFromSuperview];
         self.liveCoHostRoomView = nil;
@@ -198,11 +198,11 @@
 - (void)loadDataWithRaiseHandLists {
     __weak __typeof(self) wself = self;
     [LiveRTSManager liveGetActiveAnchorList:self.roomInfoModel.roomID
-                                             block:^(NSArray<LiveUserModel *> * _Nullable userList, RTSACKModel * _Nonnull model) {
-        if (model.result) {
-            wself.raiseHandListsView.dataLists = userList;
-        }
-    }];
+                                      block:^(NSArray<LiveUserModel *> *_Nullable userList, RTSACKModel *_Nonnull model) {
+                                          if (model.result) {
+                                              wself.raiseHandListsView.dataLists = userList;
+                                          }
+                                      }];
 }
 
 - (void)loadDataWithAudienceLists {
@@ -234,17 +234,17 @@
                                       extra:@""
                                       block:^(NSString *linkerID,
                                               RTSACKModel *model) {
-        [[ToastComponent shareToastComponent] dismiss];
-        if (model.result ||
-            model.code == RTSStatusCodeUserIsInviting ||
-            model.code == RTSStatusCodeUserIsNewInviting) {
-            // Initiate an invitation
-            NSString *name = userModel.name;
-            [[ToastComponent shareToastComponent] showWithMessage:[NSString stringWithFormat:LocalizedString(@"%@ waiting_response."), name]];
-        } else {
-            [[ToastComponent shareToastComponent] showWithMessage:model.message];
-        }
-    }];
+                                          [[ToastComponent shareToastComponent] dismiss];
+                                          if (model.result ||
+                                              model.code == RTSStatusCodeUserIsInviting ||
+                                              model.code == RTSStatusCodeUserIsNewInviting) {
+                                              // Initiate an invitation
+                                              NSString *name = userModel.name;
+                                              [[ToastComponent shareToastComponent] showWithMessage:[NSString stringWithFormat:LocalizedString(@"%@ waiting_response."), name]];
+                                          } else {
+                                              [[ToastComponent shareToastComponent] showWithMessage:model.message];
+                                          }
+                                      }];
 }
 
 #pragma mark - LiveCoHostAudienceListsViewDelegate
@@ -262,7 +262,7 @@
     [self.maskButton removeAllSubviews];
     [self.maskButton removeFromSuperview];
     self.maskButton = nil;
-    
+
     if (self.dismissBlock) {
         self.dismissBlock(state);
     }

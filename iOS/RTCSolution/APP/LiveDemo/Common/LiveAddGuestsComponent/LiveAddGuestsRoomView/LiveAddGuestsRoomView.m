@@ -1,13 +1,13 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveAddGuestsRoomView.h"
 #import "LiveAddGuestsItemView.h"
 #import "LiveNoStreamingView.h"
-#import "LiveStateIconView.h"
 #import "LiveSettingVideoConfig.h"
+#import "LiveStateIconView.h"
 
 @interface LiveAddGuestsRoomView ()
 
@@ -39,48 +39,48 @@
         [self addSubview:self.noStreamingView];
         [self.noStreamingView setUserName:roomInfoModel.anchorUserName];
         [self.noStreamingView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
 
         [self addSubview:self.streamingView];
         [self.streamingView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
 
         [self addSubview:self.netQualityView];
         [self.netQualityView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.height.mas_equalTo(17);
-          make.left.mas_equalTo(16);
-          make.top.mas_equalTo(50 + [DeviceInforTool getStatusBarHight]);
+            make.height.mas_equalTo(17);
+            make.left.mas_equalTo(16);
+            make.top.mas_equalTo(50 + [DeviceInforTool getStatusBarHight]);
         }];
 
         [self addSubview:self.micView];
         [self.micView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.height.left.equalTo(self.netQualityView);
-          make.top.mas_equalTo(75 + [DeviceInforTool getStatusBarHight]);
+            make.height.left.equalTo(self.netQualityView);
+            make.top.mas_equalTo(75 + [DeviceInforTool getStatusBarHight]);
         }];
 
         [self addSubview:self.cameraView];
         [self.cameraView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.height.left.equalTo(self.netQualityView);
-          make.top.mas_equalTo(100 + [DeviceInforTool getStatusBarHight]);
+            make.height.left.equalTo(self.netQualityView);
+            make.top.mas_equalTo(100 + [DeviceInforTool getStatusBarHight]);
         }];
 
         [self addSubview:self.guestsView];
         [self.guestsView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.bottom.mas_equalTo(-78 - [DeviceInforTool getVirtualHomeHeight]);
-          make.right.mas_equalTo(-16);
-          make.width.mas_equalTo(itemHeight);
-          make.height.mas_equalTo(viewHeight);
+            make.bottom.mas_equalTo(-78 - [DeviceInforTool getVirtualHomeHeight]);
+            make.right.mas_equalTo(-16);
+            make.width.mas_equalTo(itemHeight);
+            make.height.mas_equalTo(viewHeight);
         }];
 
         __weak __typeof(self) wself = self;
         for (int i = 0; i < maxItemNumber; i++) {
             LiveAddGuestsItemView *itemView = [[LiveAddGuestsItemView alloc] init];
             itemView.clickBlock = ^(LiveUserModel *_Nonnull userModel) {
-              if (wself.clickGuestsBlock) {
-                  wself.clickGuestsBlock(userModel);
-              }
+                if (wself.clickGuestsBlock) {
+                    wself.clickGuestsBlock(userModel);
+                }
             };
             itemView.hidden = YES;
             [self.itemList addObject:itemView];
@@ -92,7 +92,7 @@
                                         leadSpacing:0
                                         tailSpacing:0];
         [self.itemList mas_updateConstraints:^(MASConstraintMaker *make) {
-          make.left.right.equalTo(self.guestsView);
+            make.left.right.equalTo(self.guestsView);
         }];
     }
     return self;
@@ -113,13 +113,13 @@
     rtcStreamView.hidden = NO;
     [self.streamingView addSubview:rtcStreamView];
     [rtcStreamView mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.edges.equalTo(self.streamingView);
+        make.edges.equalTo(self.streamingView);
     }];
 
     // Guests
     _guestList = [self removeHostUserModel:userList];
     [self updateItemView];
-    
+
     if ([self.hostID isEqualToString:[LocalUserComponent userModel].uid]) {
         // Only the streamer needs to update the confluence layout
         [[LiveRTCManager shareRtc] updateTranscodingLayout:userList
@@ -150,7 +150,7 @@
 
         CGFloat top = self.micView.hidden ? 75 + [DeviceInforTool getStatusBarHight] : 100 + [DeviceInforTool getStatusBarHight];
         [self.cameraView mas_updateConstraints:^(MASConstraintMaker *make) {
-          make.top.mas_equalTo(top);
+            make.top.mas_equalTo(top);
         }];
 
         if ([uid isEqualToString:[LocalUserComponent userModel].uid]) {
@@ -202,7 +202,7 @@
             break;
         }
     }
-    
+
     if ([self.hostID isEqualToString:[LocalUserComponent userModel].uid]) {
         // Only the streamer needs to update the confluence layout
         [[LiveRTCManager shareRtc] updateTranscodingLayout:_userList

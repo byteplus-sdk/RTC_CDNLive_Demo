@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCoHostRaiseHandListsView.h"
 
@@ -19,12 +19,12 @@
     if (self) {
         [self addSubview:self.emptyLabel];
         [self.emptyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.center.equalTo(self);
+            make.center.equalTo(self);
         }];
 
         [self addSubview:self.roomTableView];
         [self.roomTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
     }
     return self;

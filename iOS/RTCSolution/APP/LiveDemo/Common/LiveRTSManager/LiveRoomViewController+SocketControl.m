@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomViewController+SocketControl.h"
 
@@ -15,46 +15,46 @@
             [wself addUser:userModel audienceCount:[audienceCount integerValue]];
         }
     }];
-    
-    [LiveRTSManager onAudienceLeaveRoomWithBlock:^(LiveUserModel *userModel, NSString * audienceCount) {
+
+    [LiveRTSManager onAudienceLeaveRoomWithBlock:^(LiveUserModel *userModel, NSString *audienceCount) {
         if (wself) {
             [wself removeUser:userModel audienceCount:[audienceCount integerValue]];
         }
     }];
-    
+
     [LiveRTSManager onFinishLiveWithBlock:^(NSString *roomID, NSString *type) {
         if (wself) {
             [wself receivedLiveEnd:type];
         }
     }];
-    
+
     [LiveRTSManager onLinkmicStatusWithBlock:^(LiveInteractStatus status) {
         if (wself) {
             [wself receivedRoomStatus:status];
         }
     }];
-    
+
     [LiveRTSManager onAudienceLinkmicJoinWithBlock:^(NSString *rtcRoomID, NSString *uid, NSArray<LiveUserModel *> *userList) {
         [wself receivedAddGuestsJoin:userList];
     }];
-    
+
     [LiveRTSManager onAudienceLinkmicLeaveWithBlock:^(NSString *rtcRoomID, NSString *uid, NSArray<LiveUserModel *> *userList) {
         [wself receivedAddGuestsRemoveWithUser:uid userList:userList];
     }];
-    
-    [LiveRTSManager onAudienceLinkmicFinishWithBlock:^(NSString * _Nonnull rtcRoomID) {
+
+    [LiveRTSManager onAudienceLinkmicFinishWithBlock:^(NSString *_Nonnull rtcRoomID) {
         [wself receivedAddGuestsEnd];
     }];
-    
-    [LiveRTSManager onAnchorLinkmicFinishWithBlock:^(NSString * _Nonnull rtcRoomID) {
+
+    [LiveRTSManager onAnchorLinkmicFinishWithBlock:^(NSString *_Nonnull rtcRoomID) {
         [wself receivedCoHostEnd];
     }];
 
-    [LiveRTSManager onMediaChangeWithBlock:^(NSString * _Nonnull rtcRoomID,
-                                                    NSString * _Nonnull uid,
-                                                    NSString * _Nonnull operatorUid,
-                                                    NSInteger camera,
-                                                    NSInteger mic) {
+    [LiveRTSManager onMediaChangeWithBlock:^(NSString *_Nonnull rtcRoomID,
+                                             NSString *_Nonnull uid,
+                                             NSString *_Nonnull operatorUid,
+                                             NSInteger camera,
+                                             NSInteger mic) {
         if (wself) {
             BOOL cameraBool = camera == 1 ? YES : NO;
             BOOL micBool = mic == 1 ? YES : NO;
@@ -64,27 +64,27 @@
                                                     mic:micBool];
         }
     }];
-    
-    [LiveRTSManager onMessageSendWithBlock:^(LiveUserModel * _Nonnull userModel, NSString * _Nonnull message) {
+
+    [LiveRTSManager onMessageSendWithBlock:^(LiveUserModel *_Nonnull userModel, NSString *_Nonnull message) {
         dispatch_queue_async_safe(dispatch_get_main_queue(), (^{
-            [wself receivedIMMessage:message sendUserModel:userModel];
-        }));
+                                      [wself receivedIMMessage:message sendUserModel:userModel];
+                                  }));
     }];
-    
+
     // Single Point Notification message
     [LiveRTSManager onAudienceLinkmicInviteWithBlock:^(LiveUserModel *inviter, NSString *linkerID, NSString *extra) {
         [wself receivedAddGuestsInviteWithUser:inviter
                                       linkerID:linkerID
                                          extra:extra];
     }];
-    
+
     [LiveRTSManager onAudienceLinkmicApplyWithBlock:^(LiveUserModel *applicant, NSString *linkerID, NSString *extra) {
         [wself receivedAddGuestsApplyWithUser:applicant
                                      linkerID:linkerID
                                         extra:extra];
     }];
-    
-    [LiveRTSManager onAudienceLinkmicReplyWithBlock:^(LiveUserModel *invitee, NSString * linkerID, LiveInviteReply replyType, NSString *rtcRoomID, NSString *rtcToken, NSArray<LiveUserModel *> *userList) {
+
+    [LiveRTSManager onAudienceLinkmicReplyWithBlock:^(LiveUserModel *invitee, NSString *linkerID, LiveInviteReply replyType, NSString *rtcRoomID, NSString *rtcToken, NSArray<LiveUserModel *> *userList) {
         switch (replyType) {
             case LiveInviteReplyPermitted:
                 [wself receivedAddGuestsSucceedWithUser:invitee
@@ -98,7 +98,7 @@
                 break;
         }
     }];
-    
+
     [LiveRTSManager onAudienceLinkmicPermitWithBlock:^(NSString *linkerID, LiveInviteReply permitType, NSString *rtcRoomID, NSString *rtcToken, NSArray<LiveUserModel *> *userList) {
         switch (permitType) {
             case LiveInviteReplyPermitted:
@@ -113,36 +113,36 @@
                 break;
         }
     }];
-    
-    [LiveRTSManager onAudienceLinkmicKickWithBlock:^(NSString * _Nonnull linkerID,
-                                                            NSString * _Nonnull rtcRoomID,
-                                                            NSString * _Nonnull uid) {
+
+    [LiveRTSManager onAudienceLinkmicKickWithBlock:^(NSString *_Nonnull linkerID,
+                                                     NSString *_Nonnull rtcRoomID,
+                                                     NSString *_Nonnull uid) {
         [wself receivedAddGuestsEnd];
     }];
-    
-    [LiveRTSManager onManageGuestMediaWithBlock:^(NSString * _Nonnull guestRoomID,
-                                                         NSString * _Nonnull guestUserID,
-                                                         NSInteger camera,
-                                                         NSInteger mic) {
+
+    [LiveRTSManager onManageGuestMediaWithBlock:^(NSString *_Nonnull guestRoomID,
+                                                  NSString *_Nonnull guestUserID,
+                                                  NSInteger camera,
+                                                  NSInteger mic) {
         if (wself) {
             [wself receivedAddGuestsManageGuestMedia:guestUserID
                                               camera:camera
                                                  mic:mic];
         }
     }];
-    
+
     [LiveRTSManager onAnchorLinkmicInviteWithBlock:^(LiveUserModel *inviter, NSString *linkerID, NSString *extra) {
         [wself receivedCoHostInviteWithUser:inviter
                                    linkerID:linkerID
                                       extra:extra];
     }];
-    
-    [LiveRTSManager onAnchorLinkmicReplyWithBlock:^(LiveUserModel * _Nonnull invitee,
-                                                           NSString * _Nonnull linkerID,
-                                                           LiveInviteReply replyType,
-                                                           NSString * _Nonnull rtcRoomID,
-                                                           NSString * _Nonnull rtcToken,
-                                                           NSArray<LiveUserModel *> * _Nonnull userList) {
+
+    [LiveRTSManager onAnchorLinkmicReplyWithBlock:^(LiveUserModel *_Nonnull invitee,
+                                                    NSString *_Nonnull linkerID,
+                                                    LiveInviteReply replyType,
+                                                    NSString *_Nonnull rtcRoomID,
+                                                    NSString *_Nonnull rtcToken,
+                                                    NSArray<LiveUserModel *> *_Nonnull userList) {
         switch (replyType) {
             case LiveInviteReplyPermitted:
                 [wself receivedCoHostSucceedWithUser:invitee

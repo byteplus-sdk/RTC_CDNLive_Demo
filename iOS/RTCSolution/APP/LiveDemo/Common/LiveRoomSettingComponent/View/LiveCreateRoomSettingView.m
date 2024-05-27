@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCreateRoomSettingView.h"
 #import "LiveSettingBitrateView.h"
@@ -24,41 +24,41 @@
 
         [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.centerX.equalTo(self);
-          make.top.mas_equalTo(16);
+            make.centerX.equalTo(self);
+            make.top.mas_equalTo(16);
         }];
 
         [self addSubview:self.fpsSelectView];
         [self.fpsSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.left.right.equalTo(self);
-          make.top.equalTo(self.titleLabel.mas_bottom).offset(24);
-          make.height.mas_equalTo(60);
+            make.left.right.equalTo(self);
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(24);
+            make.height.mas_equalTo(60);
         }];
 
         __weak __typeof(self) wself = self;
         [self.fpsSelectView setItemChangeBlock:^(NSInteger index) {
-          [wself fpsDidChanged:index];
+            [wself fpsDidChanged:index];
         }];
 
         [self addSubview:self.resolutoinSelectView];
         [self.resolutoinSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.left.right.height.equalTo(self.fpsSelectView);
-          make.top.equalTo(self.fpsSelectView.mas_bottom);
+            make.left.right.height.equalTo(self.fpsSelectView);
+            make.top.equalTo(self.fpsSelectView.mas_bottom);
         }];
 
         [self.resolutoinSelectView setItemChangeBlock:^(NSInteger index) {
-          [wself resolutionDidChanged:index];
+            [wself resolutionDidChanged:index];
         }];
 
         [self addSubview:self.bitrateSelectView];
         [self.bitrateSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.left.right.equalTo(self.fpsSelectView);
-          make.top.equalTo(self.resolutoinSelectView.mas_bottom).offset(20);
-          make.height.mas_equalTo(60);
+            make.left.right.equalTo(self.fpsSelectView);
+            make.top.equalTo(self.resolutoinSelectView.mas_bottom).offset(20);
+            make.height.mas_equalTo(60);
         }];
 
         [self.bitrateSelectView setBitrateDidChangedBlock:^(NSInteger bitrate) {
-          [wself bitrateDidChanged:bitrate];
+            [wself bitrateDidChanged:bitrate];
         }];
     }
     return self;
@@ -69,7 +69,7 @@
 
 - (void)setVideoConfig:(LiveSettingVideoConfig *)videoConfig {
     _videoConfig = videoConfig;
-    
+
     [self.fpsSelectView setSelectedIndex:videoConfig.fpsType];
     [self.resolutoinSelectView setSelectedIndex:videoConfig.resolutionType];
 
@@ -121,14 +121,14 @@
 
 - (LiveSettingSingleSelectView *)fpsSelectView {
     if (!_fpsSelectView) {
-        _fpsSelectView = [[LiveSettingSingleSelectView alloc] initWithTitle:LocalizedString(@"frame_rate") optionArray:@[ @"15", @"20" ]];
+        _fpsSelectView = [[LiveSettingSingleSelectView alloc] initWithTitle:LocalizedString(@"frame_rate") optionArray:@[@"15", @"20"]];
     }
     return _fpsSelectView;
 }
 
 - (LiveSettingSingleSelectView *)resolutoinSelectView {
     if (!_resolutoinSelectView) {
-        _resolutoinSelectView = [[LiveSettingSingleSelectView alloc] initWithTitle:LocalizedString(@"resolution") optionArray:@[@"540p", @"720p", @"1080p" ]];
+        _resolutoinSelectView = [[LiveSettingSingleSelectView alloc] initWithTitle:LocalizedString(@"resolution") optionArray:@[@"540p", @"720p", @"1080p"]];
     }
     return _resolutoinSelectView;
 }

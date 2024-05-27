@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCoHostUserListtCell.h"
 #import "LiveAvatarView.h"
@@ -37,31 +37,31 @@
     buttonWidth = 74;
 
     [self.rightButton mas_updateConstraints:^(MASConstraintMaker *make) {
-      make.width.mas_equalTo(buttonWidth);
+        make.width.mas_equalTo(buttonWidth);
     }];
 }
 
 - (void)createUIComponent {
     [self.contentView addSubview:self.avatarView];
     [self.avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.size.mas_equalTo(CGSizeMake(40, 40));
-      make.left.mas_equalTo(8);
-      make.bottom.equalTo(self.contentView);
+        make.size.mas_equalTo(CGSizeMake(40, 40));
+        make.left.mas_equalTo(8);
+        make.bottom.equalTo(self.contentView);
     }];
 
     [self.contentView addSubview:self.rightButton];
     [self.rightButton mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.width.mas_equalTo(74);
-      make.height.mas_equalTo(28);
-      make.right.mas_equalTo(-24);
-      make.centerY.equalTo(self.avatarView);
+        make.width.mas_equalTo(74);
+        make.height.mas_equalTo(28);
+        make.right.mas_equalTo(-24);
+        make.centerY.equalTo(self.avatarView);
     }];
 
     [self.contentView addSubview:self.nameLabel];
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.left.equalTo(self.avatarView.mas_right).mas_offset(9);
-      make.centerY.equalTo(self.avatarView);
-      make.right.mas_lessThanOrEqualTo(self.rightButton.mas_left).offset(-9);
+        make.left.equalTo(self.avatarView.mas_right).mas_offset(9);
+        make.centerY.equalTo(self.avatarView);
+        make.right.mas_lessThanOrEqualTo(self.rightButton.mas_left).offset(-9);
     }];
 }
 

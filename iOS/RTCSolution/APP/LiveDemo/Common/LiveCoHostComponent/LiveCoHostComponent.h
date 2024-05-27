@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCoHostAudienceListsView.h"
 #import "LiveCoHostRaiseHandListsView.h"
@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, LiveCoHostDismissState) {
 
 // list
 
-- (void)showInviteList:(void (^ __nullable)(LiveCoHostDismissState state))dismissBlock;
+- (void)showInviteList:(void (^__nullable)(LiveCoHostDismissState state))dismissBlock;
 
 - (void)dismissInviteList;
 
@@ -31,12 +31,12 @@ typedef NS_ENUM(NSInteger, LiveCoHostDismissState) {
 // live room
 
 - (void)showCoHost:(UIView *)superView
-     streamPushUrl:(NSString *)streamPushUrl
-     userModelList:(NSArray<LiveUserModel *> *)userModelList
-    loginUserModel:(LiveUserModel *)loginUserModel
- otherAnchorRoomId:(NSString *)otherRoomId
-  otherAnchorToken:(NSString *)otherToken
-     completeBlock:(void (^)(void))completeBlock;
+        streamPushUrl:(NSString *)streamPushUrl
+        userModelList:(NSArray<LiveUserModel *> *)userModelList
+       loginUserModel:(LiveUserModel *)loginUserModel
+    otherAnchorRoomId:(NSString *)otherRoomId
+     otherAnchorToken:(NSString *)otherToken
+        completeBlock:(void (^)(void))completeBlock;
 
 - (void)closeCoHost;
 

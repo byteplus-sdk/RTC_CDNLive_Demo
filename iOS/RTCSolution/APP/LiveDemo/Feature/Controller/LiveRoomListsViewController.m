@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomListsViewController.h"
 #import "LiveCreateRoomViewController.h"
@@ -23,40 +23,40 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navView.backgroundColor = [UIColor clearColor];
-    
+
     [self.view addSubview:self.createButton];
     [self.createButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(170, 50));
         make.centerX.equalTo(self.view);
         make.bottom.equalTo(self.view).offset(-20 - [DeviceInforTool getVirtualHomeHeight]);
     }];
-    
+
     [self.view addSubview:self.roomTableView];
     [self.roomTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.top.equalTo(self.navView.mas_bottom);
         make.bottom.equalTo(self.createButton.mas_top).offset(-20);
     }];
-    
+
     [self.view addSubview:self.noDataLabel];
     [self.noDataLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.view);
     }];
-    
+
     [[LivePlayerManager sharePlayer] startWithConfiguration];
     [self loadDataWithGetLists];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     self.navTitle = LocalizedString(@"interactive_live");
     self.navRightImage = [UIImage imageNamed:@"refresh" bundleName:HomeBundleName];
 }
 
 - (void)rightButtonAction:(BaseButton *)sender {
     [super rightButtonAction:sender];
-    
+
     [self loadDataWithGetLists];
 }
 
@@ -69,7 +69,7 @@
 - (void)loadDataWithGetLists {
     __weak __typeof(self) wself = self;
     [[ToastComponent shareToastComponent] showLoading];
-    [LiveRTSManager liveClearUserWithBlock:^(RTSACKModel * _Nonnull model) {
+    [LiveRTSManager liveClearUserWithBlock:^(RTSACKModel *_Nonnull model) {
         [LiveRTSManager liveGetActiveLiveRoomListWithBlock:^(NSArray<LiveRoomInfoModel *> *roomList, RTSACKModel *model) {
             [[ToastComponent shareToastComponent] dismiss];
             if (model.result) {
@@ -91,8 +91,8 @@
 - (void)LiveRoomTableView:(LiveRoomTableView *)LiveRoomTableView didSelectRowAtIndexPath:(LiveRoomInfoModel *)model {
     [PublicParameterComponent share].roomId = model.roomID;
     LiveRoomViewController *next = [[LiveRoomViewController alloc]
-                                    initWithRoomModel:model
-                                    streamPushUrl:@""];
+        initWithRoomModel:model
+            streamPushUrl:@""];
     [self.navigationController pushViewController:next animated:YES];
     __weak __typeof(self) wself = self;
     next.hangUpBlock = ^(BOOL result) {
@@ -120,14 +120,14 @@
         [_createButton addTarget:self action:@selector(createButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         _createButton.layer.cornerRadius = 25;
         _createButton.layer.masksToBounds = YES;
-        
+
         UIView *contentView = [[UIView alloc] init];
         contentView.backgroundColor = [UIColor clearColor];
         [_createButton addSubview:contentView];
         [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(_createButton);
         }];
-        
+
         UIImageView *iconImageView = [[UIImageView alloc] init];
         iconImageView.image = [UIImage imageNamed:@"InteractiveLive_add" bundleName:HomeBundleName];
         [contentView addSubview:iconImageView];
@@ -136,7 +136,7 @@
             make.centerY.equalTo(_createButton);
             make.left.equalTo(contentView);
         }];
-        
+
         UILabel *titleLabel = [[UILabel alloc] init];
         titleLabel.text = LocalizedString(@"create_live");
         titleLabel.textColor = [UIColor whiteColor];

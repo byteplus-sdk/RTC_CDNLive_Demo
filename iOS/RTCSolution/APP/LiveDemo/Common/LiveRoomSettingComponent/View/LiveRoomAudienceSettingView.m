@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveRoomAudienceSettingView.h"
 #import "LiveRoomSettingResolutionView.h"
@@ -28,14 +28,14 @@
 
         [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.centerX.equalTo(self);
-          make.top.mas_equalTo(16);
+            make.centerX.equalTo(self);
+            make.top.mas_equalTo(16);
         }];
 
-        NSArray *items = @[ @[ LocalizedString(@"resolution"), @"InteractiveLive_setting_resoluton", @"" ],
-                            @[ LocalizedString(@"camera_flip"), @"InteractiveLive_setting_camera_audience", @"" ],
-                            @[ LocalizedString(@"microphone"), @"InteractiveLive_setting_audio_audience", @"" ],
-                            @[ LocalizedString(@"camera"), @"InteractiveLive_setting_video_audience", @"" ] ];
+        NSArray *items = @[@[LocalizedString(@"resolution"), @"InteractiveLive_setting_resoluton", @""],
+                           @[LocalizedString(@"camera_flip"), @"InteractiveLive_setting_camera_audience", @""],
+                           @[LocalizedString(@"microphone"), @"InteractiveLive_setting_audio_audience", @""],
+                           @[LocalizedString(@"camera"), @"InteractiveLive_setting_video_audience", @""]];
 
         for (int i = 0; i < items.count; i++) {
             NSString *title = items[i][0];
@@ -53,10 +53,10 @@
             [self addSubview:button];
 
             [button mas_makeConstraints:^(MASConstraintMaker *make) {
-              make.centerX.equalTo(self).multipliedBy(0.5 * i + 0.25);
-              make.top.equalTo(self.titleLabel.mas_bottom).offset(16);
-              make.width.mas_equalTo(44);
-              make.height.mas_equalTo(68);
+                make.centerX.equalTo(self).multipliedBy(0.5 * i + 0.25);
+                make.top.equalTo(self.titleLabel.mas_bottom).offset(16);
+                make.width.mas_equalTo(44);
+                make.height.mas_equalTo(68);
             }];
 
             if (i != 0) {
@@ -68,14 +68,14 @@
 
         [self addSubview:self.resolutionView];
         [self.resolutionView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(self);
+            make.edges.equalTo(self);
         }];
 
         __weak __typeof(self) wself = self;
         [self.resolutionView setResolutionChangeBlock:^(NSInteger index) {
-          if ([wself.delegate respondsToSelector:@selector(liveRoomAudienceSettingView:didChangeResolution:)]) {
-              [wself.delegate liveRoomAudienceSettingView:wself didChangeResolution:index];
-          }
+            if ([wself.delegate respondsToSelector:@selector(liveRoomAudienceSettingView:didChangeResolution:)]) {
+                [wself.delegate liveRoomAudienceSettingView:wself didChangeResolution:index];
+            }
         }];
 
         [self.resolutionView setSelectedResKey:[LiveSettingVideoConfig defultResPullKey]];

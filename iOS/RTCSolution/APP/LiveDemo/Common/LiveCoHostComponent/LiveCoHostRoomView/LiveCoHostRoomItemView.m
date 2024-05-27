@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LiveCoHostRoomItemView.h"
 #import "LiveAvatarView.h"
@@ -31,37 +31,36 @@
     self = [super init];
     if (self) {
         _muteRemoteAudio = NO;
-        
+
         [self addSubview:self.bgMaskImageView];
         [self.bgMaskImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
-        
+
         [self addSubview:self.renderView];
         [self.renderView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
-        
+
         [self addSubview:self.topMaskImageView];
         [self.topMaskImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.equalTo(self);
             make.height.mas_equalTo(42);
         }];
-        
+
         [self addSubview:self.micButton];
         [self.micButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(34, 34));
             make.left.mas_equalTo(8);
             make.bottom.mas_equalTo(-8);
         }];
-        
+
         [self addSubview:self.avatarComponent];
         [self.avatarComponent mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.mas_equalTo(80);
             make.center.equalTo(self);
-            
         }];
-        
+
         [self addSubview:self.hostAvatarView];
         [self.hostAvatarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(34);
@@ -69,7 +68,7 @@
             make.bottom.equalTo(self).offset(-8);
             make.left.mas_greaterThanOrEqualTo(self.micButton.mas_right).offset(8);
         }];
-        
+
         [self addSubview:self.netQualityView];
         [self.netQualityView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(17);
@@ -80,7 +79,7 @@
             }
             make.top.mas_equalTo(5);
         }];
-        
+
         [self addSubview:self.micView];
         [self.micView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(17);
@@ -91,7 +90,7 @@
             }
             make.top.mas_equalTo(25);
         }];
-        
+
         [self addSubview:self.cameraView];
         [self.cameraView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(17);
@@ -102,7 +101,7 @@
             }
             make.top.mas_equalTo(46);
         }];
-        
+
         if (isOwn) {
             self.hostAvatarView.hidden = YES;
             self.micButton.hidden = YES;
@@ -118,13 +117,13 @@
 
 - (void)setUserModel:(LiveUserModel *)userModel {
     _userModel = userModel;
-    
+
     self.avatarComponent.text = userModel.name;
     self.hostAvatarView.hostName = userModel.name;
-    
+
     self.micView.hidden = userModel.mic;
     self.cameraView.hidden = userModel.camera;
-    
+
     [[LiveRTCManager shareRtc] bindCanvasViewToUid:userModel.uid];
     UIView *streamView = [[LiveRTCManager shareRtc] getStreamViewWithUid:userModel.uid];
     if (userModel.camera) {
@@ -138,7 +137,7 @@
         streamView.hidden = YES;
         self.avatarComponent.hidden = NO;
     }
-    
+
     [self.cameraView mas_updateConstraints:^(MASConstraintMaker *make) {
         if (!self.micView.hidden) {
             make.top.mas_equalTo(46);
@@ -163,7 +162,7 @@
 - (void)micButtonAction {
     _muteRemoteAudio = !_muteRemoteAudio;
     [[LiveRTCManager shareRtc] pauseRemoteAudioSubscribedStream:_muteRemoteAudio];
-    
+
     if (_muteRemoteAudio) {
         [_micButton setImage:[UIImage imageNamed:@"InteractiveLive_mic_un" bundleName:HomeBundleName] forState:UIControlStateNormal];
     } else {

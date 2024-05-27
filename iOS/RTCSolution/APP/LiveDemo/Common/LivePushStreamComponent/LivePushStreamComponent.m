@@ -1,7 +1,7 @@
-// 
+//
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-// 
+//
 
 #import "LivePushStreamComponent.h"
 #import "LivePushRenderView.h"
@@ -36,18 +36,18 @@
         [renderView setUserName:userModel.name];
         [_superView addSubview:renderView];
         [renderView mas_makeConstraints:^(MASConstraintMaker *make) {
-          make.edges.equalTo(_superView);
+            make.edges.equalTo(_superView);
         }];
         _renderView = renderView;
     }
     [self updateHostMic:userModel.mic camera:userModel.camera];
     __weak __typeof(self) wself = self;
     [[LiveRTCManager shareRtc] didChangeNetworkQuality:^(LiveNetworkQualityStatus status, NSString *_Nonnull uid) {
-      dispatch_queue_async_safe(dispatch_get_main_queue(), (^{
-          if ([uid isEqualToString:[LocalUserComponent userModel].uid]) {
-              [wself.renderView updateNetworkQuality:status];
-          }
-      }));
+        dispatch_queue_async_safe(dispatch_get_main_queue(), (^{
+                                      if ([uid isEqualToString:[LocalUserComponent userModel].uid]) {
+                                          [wself.renderView updateNetworkQuality:status];
+                                      }
+                                  }));
     }];
 }
 
@@ -62,7 +62,7 @@
 - (void)updateHostMic:(BOOL)mic camera:(BOOL)camera {
     if (_renderView) {
         [_renderView updateHostMic:mic camera:camera];
-        
+
         UIView *rtcStreamView = [[LiveRTCManager shareRtc] getStreamViewWithUid:[LocalUserComponent userModel].uid];
         if (camera) {
             rtcStreamView.hidden = NO;
